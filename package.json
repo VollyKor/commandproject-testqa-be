@@ -7,7 +7,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
-    "start:dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start:dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "prebuild": "npm run lint",
     "lint": "eslint --no-cache --ext .ts .",
     "lint:fix": "eslint --no-cache --ext .ts . --fix"
