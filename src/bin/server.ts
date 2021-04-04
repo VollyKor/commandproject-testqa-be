@@ -1,4 +1,4 @@
-import app from '../app'
+import app from '../index'
 import db from '../db/db'
 import dotenv from 'dotenv'
 dotenv.config()
