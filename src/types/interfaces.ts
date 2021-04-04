@@ -35,7 +35,7 @@ export interface UserDocument extends IUser, Document {
  }
 
 // For model
-export interface UserModel extends Model<UserDocument> {}
+export type UserModel = Model<UserDocument>
 
 
 export interface Question {
@@ -44,8 +44,10 @@ export interface Question {
     rightAnswer: string
 }
 
-export interface qnDocument extends Question, Document {}
-export interface qnModel extends Model<qnDocument>{ }
+export interface qnDocument extends Question, Document { }
+
+
+export type qnModel = Model<qnDocument>
 
 export interface IFindUserByValue<Value>  {
     (value: Value) : Promise<UserDocument>

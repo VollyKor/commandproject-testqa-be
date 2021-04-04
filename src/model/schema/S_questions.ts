@@ -1,4 +1,3 @@
-import path from 'path'
 import { model, Schema } from "mongoose"
 import {testType} from '../../helpers/constants'
 

@@ -2,10 +2,13 @@ import Questions from './schema/S_questions'
 import {testType} from '../helpers/constants'
 
 const getAll = async () => {
-    await Questions.find()
+    const questions = await Questions.find()
+    return questions
 }
+  
 const getByType = async (type : testType ) => {
-    await Questions.find({type})
+    const questions = await Questions.find({ type })
+    return questions
 }
 
 export default {getAll, getByType}

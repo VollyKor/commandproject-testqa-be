@@ -1,7 +1,7 @@
 import passport from 'passport'
 import {RequestHandler} from 'express-serve-static-core'
 import '../config/passport'
-const { HttpCode } = require('./Constants')
+import  { HttpCode } from './Constants'
 
 const guard = ((req, res, next) => {
     if (req.get('Authorization') === undefined) {
