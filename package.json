@@ -7,7 +7,6 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "npm run lint",
     "build": "tsc -p .",
     "prestart": "npm run build",
     "start": "node .",
