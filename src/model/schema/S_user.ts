@@ -19,7 +19,10 @@ const UserSchema = new Schema<UserDocument, UserModel>({
                 return re.test(String(value).toLowerCase())
             },
         },
-
+        password: {
+            type: String,
+            required: [true, 'Password required'],
+        },
         token: {
             type: String,
             default: null,
@@ -51,18 +54,15 @@ UserSchema.pre<UserDocument>('save', async function (next) {
         if (!this.isModified('password')) {
         return next()
     }
-
     // add password to schema
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-
     this.password = await bcrypt.hash(this.password, salt, null)
-    
-    return next()
+    next()
 })
 
-
 UserSchema.methods.validPassword = async function (password : string) {
-    return await bcrypt.compare(password, this.password)
+    const isValidPassword =  await bcrypt.compare(password, this.password)
+   return isValidPassword
 }
 
 const User = model<UserDocument, UserModel>("user", UserSchema)

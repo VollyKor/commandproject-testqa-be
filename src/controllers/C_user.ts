@@ -46,12 +46,13 @@ const reg = (async (req, res, next) => {
     }
 }) as RequestHandler
 
-
 const login = (async (req, res, next) => {
     try {
         const { email, password } = req.body
         const user = await Users.findByEmail(email)
-        const isValidPassword =  user?.validPassword(password)
+        
+        const isValidPassword = await user?.validPassword(password)
+        console.log('isValidPassword',  isValidPassword);
 
         if (!user || !isValidPassword) {
             return res.status(HttpCode.UNAUTHORIZED).json({
