@@ -1,14 +1,16 @@
 {
-  "name": "nodejs_test_task",
-  "version": "1.0.0",
+  "name": "team_project",
+  "version": "0.0.0",
   "description": "test Task",
+  "engines": {
+    "node": "14.x"
+  },
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
     "start:dev": "ts-node-dev --respawn --transpile-only src/bin/server.ts",
-    "prebuild": "npm run lint",
     "lint": "eslint --no-cache --ext .ts .",
     "lint:fix": "eslint --no-cache --ext .ts . --fix"
   },
