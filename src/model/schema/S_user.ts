@@ -47,7 +47,7 @@ const UserSchema = new Schema<UserDocument, UserModel>({
     }, { versionKey: false, timestamps: true })
 
     // Document middlewares
-UserSchema.pre<UserDocument>('save', async function (this: UserDocument , next) {
+UserSchema.pre<UserDocument>('save', async function (next) {
         if (!this.isModified('password')) {
         return next()
     }
