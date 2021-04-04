@@ -6,10 +6,10 @@ import {qnDocument, qnModel} from '../../types/interfaces'
 
 const QuestionSchema = new Schema<qnDocument, qnModel>({
     type: {
+        type: String,
         enum: [testType.QA, testType.TESTTHEORY, testType.COMMON],
         default: testType.COMMON
     },
-
     questions: {
         type: Array,
         required: [true, 'miss array of questions'],

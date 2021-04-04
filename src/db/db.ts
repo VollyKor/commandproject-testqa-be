@@ -1,10 +1,8 @@
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-dotenv.config()
 
-const uriDb = process.env.URI_DB
+const {URI_DB} = process.env
 
-const db = mongoose.connect(uriDb, {
+const db = mongoose.connect(URI_DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,

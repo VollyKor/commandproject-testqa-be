@@ -35,11 +35,13 @@ const UserSchema = new Schema<UserDocument, UserModel>({
         
         refreshToken: {
             type: String,
-            required: [true, 'Refresh token required'],
+            default: null,
+            // required: [true, 'Refresh token required'],
         },
         sessionId: {
             type: String,
-            required: [true, 'Refresh token required'],
+            default: null,
+            // required: [true, 'sessionId required'],
         },
         
     }, { versionKey: false, timestamps: true })
@@ -54,7 +56,8 @@ UserSchema.pre<UserDocument>('save', async function (this: UserDocument , next) 
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
 
     this.password = await bcrypt.hash(this.password, salt, null)
-    next()
+    
+    return next()
 })
 
 

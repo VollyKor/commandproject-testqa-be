@@ -1,10 +1,12 @@
 import { Document, Model } from 'mongoose'
 import {testType} from '../helpers/constants'
 
-export interface User {
+
+
+export interface IUser {
     // check types
     name: string,
-
+    // _id: string,
     email: string,
     results?: {
         qaResult: number | null,
@@ -15,12 +17,21 @@ export interface User {
     
     // check types
     token: string | null,
-    
+
+}
+
+export interface InewUser {
+    name: string,
+    email: string,
+    password: string,
+
 }
 
 // Export this for strong typing
-export interface UserDocument extends User, Document {
-    password :string
+export interface UserDocument extends IUser, Document {
+    password: string
+    _id:string
+    validPassword (password: string) : boolean
  }
 
 // For model
@@ -34,4 +45,11 @@ export interface Question {
 }
 
 export interface qnDocument extends Question, Document {}
-export interface qnModel extends Model<qnDocument>{}
+export interface qnModel extends Model<qnDocument>{ }
+
+export interface IFindUserByValue<Value>  {
+    (value: Value) : Promise<UserDocument>
+    }
+
+// export type TupdateToken = (id: string , token:string) => Promise<IUser>
+export type TupdateToken = (id: string , token:string) => void
