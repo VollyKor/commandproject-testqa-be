@@ -27,6 +27,7 @@ app.use('/users', UserRouter)
 app.get('/', (_, response) => {
   response.send('Hello world!');
 });
+
 // Error handle
 // =================================
 app.use((req, res) => {

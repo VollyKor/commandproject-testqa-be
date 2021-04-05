@@ -17,13 +17,34 @@ const getAll = (async (req, res, next) => {
 }) as RequestHandler
 
 const getByType = (async (req, res, next) => {
-    try {
-        const data = await Questions.getByType(testType.QA)
-        return res.json({
-            status: 'success',
-            code: 200,
-            data,
-        })
+        try {
+            const testquery = req.query.test
+            console.log(testquery);
+            if (testquery === testType.QA) {
+                const data = await Questions.getByType(testType.QA)
+                return res.json({
+                    status: 'success',
+                    code: 200,
+                    data,
+                })
+            }
+
+            if (testquery === testType.TESTTHEORY) {
+                const data = await Questions.getByType(testType.TESTTHEORY)
+                return res.json({
+                    status: 'success',
+                    code: 200,
+                    data,
+                })
+            }
+
+            const data = await Questions.getByType(testType.COMMON)
+            return res.json({
+                status: 'success',
+                code: 200,
+                data,
+            })
+
     } catch (e) {
         next(e)
     }
