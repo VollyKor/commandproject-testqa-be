@@ -17,9 +17,10 @@ const getAll = (async (req, res, next) => {
 }) as RequestHandler
 
 const getByType = (async (req, res, next) => {
+    
         try {
             const testquery = req.query.test
-            console.log(testquery);
+
             if (testquery === testType.QA) {
                 const data = await Questions.getByType(testType.QA)
                 return res.json({
