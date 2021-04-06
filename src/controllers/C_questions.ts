@@ -61,6 +61,14 @@ const compareAnswers = (async (req, res, next) => {
 
     const amount = fn.countRightAnswears(questions, answers);
 
+    if (amount === undefined) {
+      res.status(HttpCode.BAD_REQUEST).json({
+        status: 'error',
+        code: HttpCode.BAD_REQUEST,
+        message: 'Something wrong with questions',
+      });
+    }
+
     res.status(HttpCode.OK).json({
       status: 'success',
       code: 200,
