@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get('/', guard, Questions.getByType);
 
+router.get('/answers', Questions.compareAnswers);
 router.get('/all', guard, Questions.getAll);
 
 export default router;

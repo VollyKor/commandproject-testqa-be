@@ -30,6 +30,10 @@ const UserSchema = new mongoose_1.Schema({
             return re.test(String(value).toLowerCase());
         },
     },
+    password: {
+        type: String,
+        required: [true, 'Password required'],
+    },
     token: {
         type: String,
         default: null,
@@ -61,12 +65,13 @@ UserSchema.pre('save', function (next) {
         // add password to schema
         const salt = yield bcryptjs_1.default.genSalt(constants_1.SALT_WORK_FACTOR);
         this.password = yield bcryptjs_1.default.hash(this.password, salt, null);
-        return next();
+        next();
     });
 });
 UserSchema.methods.validPassword = function (password) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield bcryptjs_1.default.compare(password, this.password);
+        const isValidPassword = yield bcryptjs_1.default.compare(password, this.password);
+        return isValidPassword;
     });
 };
 const User = mongoose_1.model("user", UserSchema);

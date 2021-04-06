@@ -14,12 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const S_questions_1 = __importDefault(require("./schema/S_questions"));
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
-    const questions = yield S_questions_1.default.find();
+    const questions = yield S_questions_1.default.find({});
     return questions;
 });
 const getByType = (type) => __awaiter(void 0, void 0, void 0, function* () {
     const questions = yield S_questions_1.default.find({ type });
     return questions;
 });
-exports.default = { getAll, getByType };
+const getByTypeWithoutAnswers = (type) => __awaiter(void 0, void 0, void 0, function* () {
+    const questions = yield S_questions_1.default.find({ type }, { rightAnswer: 0, questionId: 0, updatedAt: 0 });
+    return questions;
+});
+exports.default = { getAll, getByType, getByTypeWithoutAnswers };
 //# sourceMappingURL=M_questions.js.map

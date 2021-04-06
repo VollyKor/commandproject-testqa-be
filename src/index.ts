@@ -4,7 +4,7 @@ import cors from 'cors';
 import './helpers/getuniqueQn';
 import { ErrorRequestHandler } from 'express-serve-static-core';
 import { PUBLIC_FOLDER_PATH, HttpCode } from './helpers/constants';
-import QuestionRouter from './routes/questions/questions';
+import QuestionRouter from './routes/questions/R_questions';
 import UserRouter from './routes/users/users';
 dotenv.config();
 

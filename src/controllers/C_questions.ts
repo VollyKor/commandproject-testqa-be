@@ -1,13 +1,11 @@
 import { RequestHandler } from 'express-serve-static-core';
 import Questions from '../model/M_questions';
-import { testType } from '../helpers/constants';
+import { HttpCode, testType } from '../helpers/constants';
 import { getuniqueQns } from '../helpers/getuniqueQn';
+import * as fn from '../helpers/compareAnswersFn';
 
 const getAll = (async (req, res, next) => {
   try {
-    // const userId = req.user.id
-    console.log('111');
-
     const data = await Questions.getAll();
     return res.json({
       status: 'success',
@@ -56,4 +54,23 @@ const getByType = (async (req, res, next) => {
   }
 }) as RequestHandler;
 
-export default { getByType, getAll };
+const compareAnswers = (async (req, res, next) => {
+  try {
+    const answers: string[] = req.body.answers;
+    const questions = await Questions.getByType(req.body.type);
+
+    const amount = fn.countRightAnswears(questions, answers);
+
+    res.status(HttpCode.OK).json({
+      status: 'success',
+      code: 200,
+      data: {
+        amountOfRightAnswers: amount,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}) as RequestHandler;
+
+export default { getByType, getAll, compareAnswers };
