@@ -24,7 +24,7 @@ const getByType = (async (req, res, next) => {
     const testquery = req.query.test;
 
     if (testquery === testType.QA) {
-      const questions = await Questions.getByType(testType.QA);
+      const questions = await Questions.getByTypeWithoutAnswers(testType.QA);
       const data = getuniqueQns(questions);
       return res.json({
         status: 'success',
@@ -34,7 +34,9 @@ const getByType = (async (req, res, next) => {
     }
 
     if (testquery === testType.TESTTHEORY) {
-      const questions = await Questions.getByType(testType.TESTTHEORY);
+      const questions = await Questions.getByTypeWithoutAnswers(
+        testType.TESTTHEORY,
+      );
       const data = getuniqueQns(questions);
       return res.json({
         status: 'success',
@@ -43,7 +45,7 @@ const getByType = (async (req, res, next) => {
       });
     }
 
-    const data = await Questions.getByType(testType.COMMON);
+    const data = await Questions.getByTypeWithoutAnswers(testType.COMMON);
     return res.json({
       status: 'success',
       code: 200,

@@ -35,7 +35,8 @@ export type UserModel = Model<UserDocument>;
 
 export interface Question {
   type: testType;
-  questions: string[];
+  answers: string[];
+  question: string[];
   rightAnswer: string;
 }
 

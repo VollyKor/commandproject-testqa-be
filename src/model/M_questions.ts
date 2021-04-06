@@ -13,4 +13,12 @@ const getByType = async (type: testType): Promise<Question[]> => {
   return questions;
 };
 
-export default { getAll, getByType };
+const getByTypeWithoutAnswers = async (type: testType): Promise<Question[]> => {
+  const questions: Question[] = await Questions.find(
+    { type },
+    { rightAnswer: 0, questionId: 0, updatedAt: 0 },
+  );
+  return questions;
+};
+
+export default { getAll, getByType, getByTypeWithoutAnswers };
