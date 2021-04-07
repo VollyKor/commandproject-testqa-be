@@ -173,6 +173,16 @@
               }        
             }
           },
+          "401": {
+            "description": "User is not unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }        
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -210,7 +220,104 @@
 
         "security": [{ "Bearer": [] }],
 
-        "responses": {}
+        "responses": {
+           "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User is not unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }        
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test": {
+      "get": {
+        "tags": ["Test"],
+        "summary": "GET QUESTIONS BY TYPE",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER TOKEN IS REQUIRED"
+            },
+            {
+            "in": "query",
+            "name": "test",
+            "required": true,
+            "type": "string",
+            "description": " < qa > OR < testTheory > ONLY",
+            "example": "qa"
+            }],
+
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/test/TestResponseSuccessful"
+                }
+              }        
+            }
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User is not unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }        
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -243,9 +350,9 @@
                 "type": "object",
                 "properties": {
                     "status": {
-                    "type": "string",
-                    "description": "Response status",
-                    "example": "success"
+                      "type": "string",
+                      "description": "Response status",
+                      "example": "success"
                     },
                     "code": {
                     "type": "interge",
@@ -256,23 +363,24 @@
                         "type": "object",
                         "properties": {
                             "id": {
-                    "type": "string",
-                    "description": "User's id",
-                    "example": "a123b456c789d123e456f789"
-                    },
-                    "email": {
-                    "type": "string",
-                    "description": "User's email",
-                    "format": "email",
-                    "example": "user@example.com"
-                    },
-                    "name": {
-                    "type": "string",
-                    "description": "User's name",
-                    "example": "User"
-                    }
+                              "type": "string",
+                              "description": "User's id",
+                              "example": "a123b456c789d123e456f789"
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "User's email",
+                              "format": "email",
+                              "example": "user@example.com"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "User's name",
+                              "example": "User"
+                            }
                         }
-                    }  }    
+                      }  
+                  }    
             },
             "RegistrationErrorConflict": {
                 "type": "object",
@@ -299,7 +407,7 @@
                     }  
                 }
             }                         
-          },
+        },
         "login": {
             "LoginRequest": {
                 "type": "object",
@@ -418,6 +526,118 @@
                     }
                 }    
             }   
+        },        
+        "test": {
+          "TestResponseSuccessful": {
+            "type": "array",
+            "item": {
+               "type": "object",
+               "properties": {
+                  "status": {
+                    "type": "string",
+                    "description": "Response status",
+                    "example": "success"
+                  },
+                  "code": {
+                    "type": "interge",
+                    "description": "Response code",
+                    "example": "200"
+                  },
+                  "data": {
+                    "type": "array",
+                    "description": "Response data",
+                    "item": {
+                      "type": "object",
+                      "properties": {                        
+                        "type": {
+                          "type": "string",
+                          "description": "Type of question",
+                          "example": "qa"
+                        },
+                        "questions": {
+                          "type": "array",
+                          "description": "Array of questions",
+                          "example": []
+                        },
+                        "_id": {
+                          "type": "string",
+                          "description": "ID of question",
+                          "example": "a123b456c789d123e456f789"
+                        },
+                        "question": {
+                          "type": "string",
+                          "description": "Question",
+                          "example": "What's the weather like?"
+                        },
+                         "questionId": {
+                          "type": "interge",
+                          "description": "Question's ID",
+                          "example": "1"
+                        },
+                        "answers": {
+                          "type": "array",
+                          "description": "Array of answers",
+                          "item": {
+                            "type": "string",
+                            "description": "Some answer",
+                            "example": "Fine"
+                          },
+                          "example": ["Sunny", "Rainy", "Cloudy", "Windy", "Foggy", "I don't know"]
+                        },
+                        "rightAnswer": {
+                          "type": "string",
+                          "description": "Right answer for question",
+                          "example": "Sunny"
+                        },
+                        "updatedAt": {
+                          "type": "date",
+                          "description": "Update date",
+                          "example": "2004-04-04T04:04:04.402Z"
+                        }
+                      }
+                    }                    
+                  }
+                }   
+              },
+            "example": [{ 
+              "type": "qa",
+                "questions": [],
+                "_id": "a123b456c789d123e456f789",
+                "question": "What's the weather like?",
+                "questionId": 1,
+                "answers": ["Sunny", "Rainy", "Cloudy", "Windy", "Foggy", "I don't know"],
+                "rightAnswer": "Suning",
+                "updatedAt": "2004-04-04T04:04:04.402Z"
+              }, {
+              "type": "testTheory",
+                "questions": [],
+                "_id": "123a456b789c123d456e789f",
+                "question": "What is the temperature?",
+                "questionId": 1,
+                "answers": ["Nice", "Fine", "Dreadful", "Terrible", "I don't know"],
+                "rightAnswer": "Fine",
+                "updatedAt": "2005-05-05T05:05:05.502Z"
+              }]                
+        }},
+        "ErrorUnauthorized": {
+                "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "string",
+                            "description": "Error status",
+                            "example": "error"
+                        },
+                        "code": {
+                            "type": "string",
+                            "description": "Error code",
+                            "example": "401"
+                        },
+                        "data": {
+                            "type": "string",
+                            "description": "Error fata",
+                            "example": "Unauthorized"
+                        }
+                    }
         },
         "ErrorBadRequest": {
                 "type": "object",
@@ -449,3 +669,4 @@
     }    
   }
 }
+
