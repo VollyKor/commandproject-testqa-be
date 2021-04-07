@@ -1,0 +1,451 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.1",
+    "title": "PRO TEST SERVER",
+    "description": "Shows how to use PRO TEST SERVER",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },    
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "https://team-project-be.herokuapp.com/" }, { "url": "http://localhost:3010/" }],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Users endpoints"
+    },
+    {
+      "name": "Test",
+      "description": "Test endpoints"
+    }
+ ],
+
+  "paths": {
+    "/users/registration": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "USER REGISTRATION",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/registration/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registration/RegistrationResponseSuccessful"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email is already use",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registration/RegistrationErrorConflict"
+                }
+              }        
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }  
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "USER LOGIN",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login/LoginResponseSuccessful"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login/LoginUnauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }  
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "USER LOGOUT",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER TOKEN IS REQUIRED"
+        }],
+
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Request forbidden",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/logout/LogoutForbidden"
+                }
+              }        
+            }
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "GET CURRENT USER",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER TOKEN IS REQUIRED"
+        }],
+
+        "security": [{ "Bearer": [] }],
+
+        "responses": {}
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+        "registration": {
+            "RegistrationRequest": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "User"
+                },        
+                "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email",
+                    "example": "user@example.com"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "example": "password"
+                }          
+            }},
+            "RegistrationResponseSuccessful": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                    "type": "string",
+                    "description": "Response status",
+                    "example": "success"
+                    },
+                    "code": {
+                    "type": "interge",
+                    "description": "Response code",
+                    "example": "201"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                    "type": "string",
+                    "description": "User's id",
+                    "example": "a123b456c789d123e456f789"
+                    },
+                    "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email",
+                    "example": "user@example.com"
+                    },
+                    "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "User"
+                    }
+                        }
+                    }  }    
+            },
+            "RegistrationErrorConflict": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                    "type": "string",
+                    "description": "Response status",
+                    "example": "error"
+                    },
+                    "code": {
+                    "type": "interge",
+                    "description": "Response code",
+                    "example": "409"
+                    },
+                    "data": {
+                    "type": "string",
+                    "description": "Response data",
+                    "example": "Conflict"
+                    },
+                    "message": {
+                    "type": "string",
+                    "description": "Response message",
+                    "example": "Email is already use"
+                    }  
+                }
+            }                         
+          },
+        "login": {
+            "LoginRequest": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {                
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "example": "password"
+                    }          
+                }
+            },
+            "LoginResponseSuccessful": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Response status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "interge",
+                        "description": "Response code",
+                        "example": "200"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "string",
+                                "description": "User's token",
+                                "example": "asdf2a3sd3sd1asd3.ewiZXhwIjo3NzU5OTc3fQ.jwVWnTU2MCcZkLzS_-i2zRs"
+                            },
+                            "email": {
+                                "type": "string",
+                                "description": "User's email",
+                                "format": "email",
+                                "example": "user@example.com"
+                            }
+                        }
+                    }
+                }    
+            },
+            "LoginUnauthorized": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                    "type": "string",
+                    "description": "Response status",
+                    "example": "error"
+                    },
+                    "code": {
+                    "type": "interge",
+                    "description": "Response code",
+                    "example": "401"
+                    },
+                    "data": {
+                    "type": "string",
+                    "description": "Response data",
+                    "example": "UNAUTHORIZED"
+                    },
+                    "message": {
+                    "type": "string",
+                    "description": "Response message",
+                    "example": "Invalid credentials"
+                    }  
+                }
+            }
+        },
+        "logout": {
+            "LogoutRequest": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {                
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "example": "password"
+                    }          
+                }
+            },
+            "LogoutForbidden": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Response status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "interge",
+                        "description": "Response code",
+                        "example": "403"
+                    },
+                    "data": {
+                        "type": "string",
+                        "description": "Response data",
+                        "example": "Forbidden"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Response message",
+                        "example": "Access is denied"
+                    }
+                }    
+            }   
+        },
+        "ErrorBadRequest": {
+                "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "description": "Error message",
+                            "example": "error message"
+                        }
+                    }
+        },
+        "ErrorInternalServer": {
+            "type": "object",
+            "properties": {
+                "message": {
+                "type": "string",
+                "description": "Error message",
+                "example": "error message"
+                }
+            }
+        }
+    },
+    "securitySchemes": {
+      "Bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+      }
+    }    
+  }
+}

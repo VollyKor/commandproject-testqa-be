@@ -1,7 +1,10 @@
-import express from 'express';
-import dotenv from 'dotenv';
+import express from 'express'
+import dotenv from 'dotenv'
 import cors from 'cors'
 import {ErrorRequestHandler} from 'express-serve-static-core'
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from './swagger.json'
+
 import { PUBLIC_FOLDER_PATH, HttpCode } from './helpers/constants'
 import QuestionRouter from './routes/questions/questions';
 import UserRouter from './routes/users/users';
@@ -18,7 +21,6 @@ app.use(express.json())
 app.use(express.static(PUBLIC_FOLDER_PATH()))
 
 
-
 // Common routes
 // ================================
 app.use('/test', QuestionRouter);
@@ -27,6 +29,9 @@ app.use('/users', UserRouter)
 app.get('/', (_, response) => {
   response.send('Hello world!');
 });
+
+// Path for swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Error handle
 // =================================
