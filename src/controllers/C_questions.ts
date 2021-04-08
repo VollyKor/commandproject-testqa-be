@@ -3,6 +3,7 @@ import Questions from '../model/M_questions';
 import { HttpCode, testType } from '../helpers/constants';
 import { getuniqueQns } from '../helpers/getuniqueQn';
 import * as fn from '../helpers/compareAnswersFn';
+import { Request } from 'express';
 
 const getAll = (async (req, res, next) => {
   try {
@@ -54,7 +55,16 @@ const getByType = (async (req, res, next) => {
   }
 }) as RequestHandler;
 
-const compareAnswers = (async (req, res, next) => {
+interface IreqAnswer {
+  type: testType;
+  answers: string[];
+}
+
+const compareAnswers = (async (
+  req: Request<unknown, unknown, IreqAnswer>,
+  res,
+  next,
+) => {
   try {
     const answers: string[] = req.body.answers;
     const questions = await Questions.getByType(req.body.type);

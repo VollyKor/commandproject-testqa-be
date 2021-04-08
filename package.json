@@ -14,7 +14,7 @@
     "start:dev": "ts-node-dev --respawn --transpile-only src/bin/server.ts",
     "lint": "eslint --no-cache --ext .ts .",
     "lint:fix": "eslint --no-cache --ext .ts . --fix",
-        "prebuild": "npm run swagger",
+    "prebuild": "npm run swagger",
     "swagger": "tsoa spec",
     "predev": "npm run swagger",
     "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec\""
@@ -52,6 +52,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "prettier": "^2.2.1",
+    "query-string": "^7.0.0",
     "swagger-ui-express": "^4.1.6",
     "tsoa": "^3.6.1",
     "typescript": "^4.2.3"
