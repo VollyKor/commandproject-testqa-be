@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.1.1",
+    "version": "2.1.1",
     "title": "PRO TEST SERVER",
     "description": "Shows how to use PRO TEST SERVER",
     "license": {
@@ -341,7 +341,6 @@
         }
       }
     }
-
   },
 
   "components": {
@@ -376,12 +375,12 @@
                       "type": "string",
                       "description": "Response status",
                       "example": "success"
-                    },
+                      },
                     "code": {
-                    "type": "interge",
-                    "description": "Response code",
-                    "example": "201"
-                    },
+                      "type": "interge",
+                      "description": "Response code",
+                      "example": "201"
+                      },
                     "data": {
                         "type": "object",
                         "properties": {
@@ -553,50 +552,27 @@
         },        
       "test": {
         "TestResponseSuccessful": {
-            "type": "array",
-            "item": {
-               "type": "object",
-               "properties": {
-                  "status": {
-                    "type": "string",
-                    "description": "Response status",
-                    "example": "success"
-                  },
-                  "code": {
-                    "type": "interge",
-                    "description": "Response code",
-                    "example": "200"
-                  },
-                  "data": {
-                    "type": "array",
-                    "description": "Response data",
-                    "item": {
-                      "type": "object",
-                      "properties": {                        
-                        "type": {
-                          "type": "string",
-                          "description": "Type of question",
-                          "example": "qa"
-                        },
-                        "questions": {
-                          "type": "array",
-                          "description": "Array of questions",
-                          "example": []
-                        },
-                        "_id": {
-                          "type": "string",
-                          "description": "ID of question",
-                          "example": "a123b456c789d123e456f789"
-                        },
-                        "question": {
-                          "type": "string",
-                          "description": "Question",
-                          "example": "What's the weather like?"
-                        },
-                         "questionId": {
-                          "type": "interge",
-                          "description": "Question's ID",
-                          "example": "1"
+          "type": "object",
+            "property": {
+              "status": {
+                "type": "string",
+                "description": "Response's status",
+                "example": "success"
+                },
+              "code": {
+                "type": "interge",
+                "description": "Response's code",
+                "example": "200"
+                },
+              "data": {
+                "type": "array",
+                "item": {
+                  "type": "object",
+                    "properties": {                        
+                      "type": {
+                        "type": "string",
+                        "description": "Type of question",
+                        "example": "qa"
                         },
                         "answers": {
                           "type": "array",
@@ -608,41 +584,36 @@
                           },
                           "example": ["Sunny", "Rainy", "Cloudy", "Windy", "Foggy", "I don't know"]
                         },
-                        "rightAnswer": {
+                        "_id": {
                           "type": "string",
-                          "description": "Right answer for question",
-                          "example": "Sunny"
+                          "description": "ID of question",
+                          "example": "a123b456c789d123e456f789"
                         },
-                        "updatedAt": {
-                          "type": "date",
-                          "description": "Update date",
-                          "example": "2004-04-04T04:04:04.402Z"
+                        "question": {
+                          "type": "string",
+                          "description": "Question",
+                          "example": "What's the weather like?"
                         }
                       }
                     }                    
                   }
-                }   
-              },
-            "example": [{ 
-              "type": "qa",
-                "questions": [],
-                "_id": "a123b456c789d123e456f789",
-                "question": "What's the weather like?",
-                "questionId": 1,
+              },              
+            "example": {
+              "status": "success",
+              "code": 200,
+              "data": [{ 
+                "type": "qa",
                 "answers": ["Sunny", "Rainy", "Cloudy", "Windy", "Foggy", "I don't know"],
-                "rightAnswer": "Suning",
-                "updatedAt": "2004-04-04T04:04:04.402Z"
+                "_id": "a123b456c789d123e456f789",
+                "question": "What's the weather like?"                
               }, {
-              "type": "testTheory",
-                "questions": [],
-                "_id": "123a456b789c123d456e789f",
-                "question": "What is the temperature?",
-                "questionId": 1,
+                "type": "testTheory",
                 "answers": ["Nice", "Fine", "Dreadful", "Terrible", "I don't know"],
-                "rightAnswer": "Fine",
-                "updatedAt": "2005-05-05T05:05:05.502Z"
-              }]                
-            },
+                "_id": "123a456b789c123d456e789f",
+                "question": "What is the temperature?"
+              }]           
+            }  
+          },
         "AnswersRequest": {
             "type": "object",
             "required": ["type", "answers"],
@@ -697,6 +668,7 @@
             }  
           }
         },
+        
       "ErrorUnauthorized": {
                 "type": "object",
                     "properties": {
@@ -706,7 +678,7 @@
                             "example": "error"
                         },
                         "code": {
-                            "type": "string",
+                            "type": "interge",
                             "description": "Error code",
                             "example": "401"
                         },
@@ -754,7 +726,9 @@
       "scheme": "bearer",
       "bearerFormat": "JWT"
       }
-    }    
+    }
   }
 }
+
+
 
