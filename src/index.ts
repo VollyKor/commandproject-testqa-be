@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerDocument from './swagger.json'
 
 import { PUBLIC_FOLDER_PATH, HttpCode } from './helpers/constants'
-import QuestionRouter from './routes/questions/questions';
+import QuestionRouter from './routes/questions/R_questions';
 import UserRouter from './routes/users/users';
 dotenv.config();
 
@@ -24,7 +24,7 @@ app.use(express.static(PUBLIC_FOLDER_PATH()))
 // Common routes
 // ================================
 app.use('/test', QuestionRouter);
-app.use('/users', UserRouter)
+app.use('/users', UserRouter);
 
 app.get('/', (_, response) => {
   response.send('Hello world!');
@@ -36,14 +36,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Error handle
 // =================================
 app.use((req, res) => {
-    res.status(HttpCode.NOT_FOUND).json({ message: 'Not found app' })
-})
+  res.status(HttpCode.NOT_FOUND).json({ message: 'Not found app' });
+});
 
-app.use (((err, req, res, next) => {
-    if (err.status === HttpCode.BAD_REQUEST) {
-        return res.status(HttpCode.BAD_REQUEST).json(err)
-    }
-    res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: err.message })
-}) as ErrorRequestHandler )
+app.use(((err, _, res, next) => {
+  if (err.status === HttpCode.BAD_REQUEST) {
+    return res.status(HttpCode.BAD_REQUEST).json(err);
+  }
+  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
+}) as ErrorRequestHandler);
 
-export default app
+export default app;

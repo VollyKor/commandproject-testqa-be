@@ -20,7 +20,6 @@ dotenv_1.default.config();
 const SECRET_KEY = process.env.JWT_SECRET;
 const reg = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('req.body', req.body);
         const { email, name } = req.body;
         const user = yield M_user_1.default.findByEmail(email);
         if (user) {
@@ -51,7 +50,8 @@ const login = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const { email, password } = req.body;
         const user = yield M_user_1.default.findByEmail(email);
-        const isValidPassword = user === null || user === void 0 ? void 0 : user.validPassword(password);
+        const isValidPassword = yield (user === null || user === void 0 ? void 0 : user.validPassword(password));
+        console.log('isValidPassword', isValidPassword);
         if (!user || !isValidPassword) {
             return res.status(constants_1.HttpCode.UNAUTHORIZED).json({
                 status: 'error',
@@ -92,7 +92,7 @@ const current = ((req, res, next) => __awaiter(void 0, void 0, void 0, function*
     const { email, name } = yield M_user_1.default.findByToken(token);
     return res.status(200).json({
         email,
-        name
+        name,
     });
 }));
 exports.default = { reg, login, logout, current };
