@@ -188,7 +188,7 @@
             "content": {
                 "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/user/logout/LogoutForbidden"
+                  "$ref": "#/components/schemas/ErrorForbidden"
                 }
               }        
             }
@@ -522,32 +522,7 @@
                         "example": "password"
                     }          
                 }
-            },
-            "LogoutForbidden": {
-                "type": "object",
-                "properties": {
-                    "status": {
-                        "type": "string",
-                        "description": "Response status",
-                        "example": "error"
-                    },
-                    "code": {
-                        "type": "interge",
-                        "description": "Response code",
-                        "example": "403"
-                    },
-                    "data": {
-                        "type": "string",
-                        "description": "Response data",
-                        "example": "Forbidden"
-                    },
-                    "message": {
-                        "type": "string",
-                        "description": "Response message",
-                        "example": "Access is denied"
-                    }
-                }    
-            }   
+            }            
           }
         },        
       "test": {
@@ -669,26 +644,6 @@
           }
         },
         
-      "ErrorUnauthorized": {
-                "type": "object",
-                    "properties": {
-                        "status": {
-                            "type": "string",
-                            "description": "Error status",
-                            "example": "error"
-                        },
-                        "code": {
-                            "type": "interge",
-                            "description": "Error code",
-                            "example": "401"
-                        },
-                        "data": {
-                            "type": "string",
-                            "description": "Error fata",
-                            "example": "Unauthorized"
-                        }
-                    }
-        },
       "ErrorBadRequest": {
           "type": "object",
           "properties": {
@@ -708,6 +663,46 @@
               "example": "Error's message"
               }
           }
+        },
+      "ErrorUnauthorized": {
+                "type": "object",
+                    "properties": {
+                        "status": {
+                            "type": "string",
+                            "description": "Error status",
+                            "example": "error"
+                        },
+                        "code": {
+                            "type": "interge",
+                            "description": "Error code",
+                            "example": "401"
+                        },
+                        "message": {
+                            "type": "string",
+                            "description": "Error fata",
+                            "example": "User is unauthorized"
+                        }
+                    }
+        },      
+      "ErrorForbidden": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Response status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "interge",
+                        "description": "Response code",
+                        "example": "403"
+                    },    
+                    "message": {
+                        "type": "string",
+                        "description": "Response message",
+                        "example": "Access is denied"
+                    }
+                }    
         },
       "ErrorInternalServer": {
             "type": "object",
