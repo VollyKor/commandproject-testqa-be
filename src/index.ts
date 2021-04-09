@@ -11,9 +11,6 @@ import UserRouter from './routes/users/users';
 import AuthRouter from './routes/auth/R_auth';
 dotenv.config();
 
-import { example } from './controllers/user666';
-console.log(example);
-
 const app = express();
 app.use(cors());
 app.use(express.json());

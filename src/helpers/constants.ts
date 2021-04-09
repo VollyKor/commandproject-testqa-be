@@ -20,6 +20,11 @@ export enum testType {
   COMMON = 'common',
 }
 
+export const reqGoogleUserEmail =
+  'https://www.googleapis.com/auth/userinfo.email';
+export const reqGoogleUserData =
+  'https://www.googleapis.com/auth/userinfo.profile';
+
 export const SALT_WORK_FACTOR = 8;
 
 export const PORT = '3010';

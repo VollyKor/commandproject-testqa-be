@@ -41,6 +41,7 @@
     "@types/passport-jwt": "^3.0.5",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
