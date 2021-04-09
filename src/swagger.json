@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.1",
+    "version": "0.1.1",
     "title": "PRO TEST SERVER",
     "description": "Shows how to use PRO TEST SERVER",
     "license": {
@@ -35,7 +35,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/registration/RegistrationRequest"
+                "$ref": "#/components/schemas/user/registration/RegistrationRequest"
               }
             }
           }
@@ -46,7 +46,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/registration/RegistrationResponseSuccessful"
+                  "$ref": "#/components/schemas/user/registration/RegistrationResponseSuccessful"
                 }
               }
             }
@@ -66,7 +66,7 @@
             "content": {
                 "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/registration/RegistrationErrorConflict"
+                  "$ref": "#/components/schemas/user/registration/RegistrationErrorConflict"
                 }
               }        
             }
@@ -95,7 +95,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/login/LoginRequest"
+                "$ref": "#/components/schemas/user/login/LoginRequest"
               }
             }
           }
@@ -106,7 +106,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/login/LoginResponseSuccessful"
+                  "$ref": "#/components/schemas/user/login/LoginResponseSuccessful"
                 }
               }
             }
@@ -126,7 +126,7 @@
             "content": {
                 "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/login/LoginUnauthorized"
+                  "$ref": "#/components/schemas/user/login/LoginUnauthorized"
                 }
               }
             }
@@ -182,61 +182,13 @@
                 }
               }        
             }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-                "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInternalServer"
-                }
-              }
-            }
-          },
+          },          
           "403": {
             "description": "Request forbidden",
             "content": {
                 "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/logout/LogoutForbidden"
-                }
-              }        
-            }
-          }
-        }
-      }
-    },
-    "/users/current": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "GET CURRENT USER",
-        "parameters": [{
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
-        }],
-
-        "security": [{ "Bearer": [] }],
-
-        "responses": {
-           "400": {
-            "description": "Request error",
-            "content": {
-                "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorBadRequest"
-                }
-              }        
-            }
-          },
-          "401": {
-            "description": "User is not unauthorized",
-            "content": {
-                "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                  "$ref": "#/components/schemas/ErrorForbidden"
                 }
               }        
             }
@@ -254,7 +206,7 @@
         }
       }
     },
-    "/test": {
+     "/test": {
       "get": {
         "tags": ["Test"],
         "summary": "GET QUESTIONS BY TYPE",
@@ -270,7 +222,7 @@
             "name": "test",
             "required": true,
             "type": "string",
-            "description": " < qa > OR < testTheory > ONLY",
+            "description": " < qa > OR < testTheory > OR < common > ONLY",
             "example": "qa"
             }],
 
@@ -319,11 +271,81 @@
           }
         }
       }
+    },
+    "/test/answers": {
+      "get": {
+        "tags": ["Test"],
+        "summary": "GET ANSWERS TO COMPLETED TEST",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER TOKEN IS REQUIRED"
+            }],
+        "requestBody": {
+          "description": "Object of answers",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/test/AnswersRequest"
+              }
+            }
+          }
+        },
+
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/test/TestResponseAnswersSuccessful"
+                  }
+                }        
+              }
+            },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User is not unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }        
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
 
   "components": {
     "schemas": {
+      "user": {
         "registration": {
             "RegistrationRequest": {
                 "type": "object",
@@ -353,12 +375,12 @@
                       "type": "string",
                       "description": "Response status",
                       "example": "success"
-                    },
+                      },
                     "code": {
-                    "type": "interge",
-                    "description": "Response code",
-                    "example": "201"
-                    },
+                      "type": "interge",
+                      "description": "Response code",
+                      "example": "201"
+                      },
                     "data": {
                         "type": "object",
                         "properties": {
@@ -407,7 +429,7 @@
                     }  
                 }
             }                         
-        },
+          },
         "login": {
             "LoginRequest": {
                 "type": "object",
@@ -482,7 +504,7 @@
                     }  
                 }
             }
-        },
+          },
         "logout": {
             "LogoutRequest": {
                 "type": "object",
@@ -500,79 +522,32 @@
                         "example": "password"
                     }          
                 }
-            },
-            "LogoutForbidden": {
-                "type": "object",
-                "properties": {
-                    "status": {
-                        "type": "string",
-                        "description": "Response status",
-                        "example": "error"
-                    },
-                    "code": {
-                        "type": "interge",
-                        "description": "Response code",
-                        "example": "403"
-                    },
-                    "data": {
-                        "type": "string",
-                        "description": "Response data",
-                        "example": "Forbidden"
-                    },
-                    "message": {
-                        "type": "string",
-                        "description": "Response message",
-                        "example": "Access is denied"
-                    }
-                }    
-            }   
+            }            
+          }
         },        
-        "test": {
-          "TestResponseSuccessful": {
-            "type": "array",
-            "item": {
-               "type": "object",
-               "properties": {
-                  "status": {
-                    "type": "string",
-                    "description": "Response status",
-                    "example": "success"
-                  },
-                  "code": {
-                    "type": "interge",
-                    "description": "Response code",
-                    "example": "200"
-                  },
-                  "data": {
-                    "type": "array",
-                    "description": "Response data",
-                    "item": {
-                      "type": "object",
-                      "properties": {                        
-                        "type": {
-                          "type": "string",
-                          "description": "Type of question",
-                          "example": "qa"
-                        },
-                        "questions": {
-                          "type": "array",
-                          "description": "Array of questions",
-                          "example": []
-                        },
-                        "_id": {
-                          "type": "string",
-                          "description": "ID of question",
-                          "example": "a123b456c789d123e456f789"
-                        },
-                        "question": {
-                          "type": "string",
-                          "description": "Question",
-                          "example": "What's the weather like?"
-                        },
-                         "questionId": {
-                          "type": "interge",
-                          "description": "Question's ID",
-                          "example": "1"
+      "test": {
+        "TestResponseSuccessful": {
+          "type": "object",
+            "property": {
+              "status": {
+                "type": "string",
+                "description": "Response's status",
+                "example": "success"
+                },
+              "code": {
+                "type": "interge",
+                "description": "Response's code",
+                "example": "200"
+                },
+              "data": {
+                "type": "array",
+                "item": {
+                  "type": "object",
+                    "properties": {                        
+                      "type": {
+                        "type": "string",
+                        "description": "Type of question",
+                        "example": "qa"
                         },
                         "answers": {
                           "type": "array",
@@ -584,42 +559,112 @@
                           },
                           "example": ["Sunny", "Rainy", "Cloudy", "Windy", "Foggy", "I don't know"]
                         },
-                        "rightAnswer": {
+                        "_id": {
                           "type": "string",
-                          "description": "Right answer for question",
-                          "example": "Sunny"
+                          "description": "ID of question",
+                          "example": "a123b456c789d123e456f789"
                         },
-                        "updatedAt": {
-                          "type": "date",
-                          "description": "Update date",
-                          "example": "2004-04-04T04:04:04.402Z"
+                        "question": {
+                          "type": "string",
+                          "description": "Question",
+                          "example": "What's the weather like?"
                         }
                       }
                     }                    
                   }
-                }   
-              },
-            "example": [{ 
-              "type": "qa",
-                "questions": [],
-                "_id": "a123b456c789d123e456f789",
-                "question": "What's the weather like?",
-                "questionId": 1,
+              },              
+            "example": {
+              "status": "success",
+              "code": 200,
+              "data": [{ 
+                "type": "qa",
                 "answers": ["Sunny", "Rainy", "Cloudy", "Windy", "Foggy", "I don't know"],
-                "rightAnswer": "Suning",
-                "updatedAt": "2004-04-04T04:04:04.402Z"
+                "_id": "a123b456c789d123e456f789",
+                "question": "What's the weather like?"                
               }, {
-              "type": "testTheory",
-                "questions": [],
-                "_id": "123a456b789c123d456e789f",
-                "question": "What is the temperature?",
-                "questionId": 1,
+                "type": "testTheory",
                 "answers": ["Nice", "Fine", "Dreadful", "Terrible", "I don't know"],
-                "rightAnswer": "Fine",
-                "updatedAt": "2005-05-05T05:05:05.502Z"
-              }]                
-        }},
-        "ErrorUnauthorized": {
+                "_id": "123a456b789c123d456e789f",
+                "question": "What is the temperature?"
+              }]           
+            }  
+          },
+        "AnswersRequest": {
+            "type": "object",
+            "required": ["type", "answers"],
+            "properties": {                
+              "type": {
+                "type": "string",
+                "description": "< qa > or < testTheory > or < common > ONLY",
+                "example": "qa"
+                },
+              "answers": {
+                "type": "array",
+                "description": "Array of answers",
+                "item": {
+                  "type": "string",
+                  "description": "User's answer",
+                  "example": "Suning"
+                  },
+                "example": ["Suning", "Fine"]
+                }          
+              }
+            },
+        "TestResponseAnswersSuccessful": {
+           "type": "object",
+            "property": {
+              "status": {
+                "type": "string",
+                "description": "Response's status",
+                "example": "success"
+                },
+              "code": {
+                "type": "interge",
+                "description": "Response's code",
+                "example": "200"
+                },
+              "data": {
+                "type": "object",
+                "property": {
+                  "amountOfRightAnswers": {
+                    "type": "interge",
+                    "description": "Amount Of Right Answers",
+                    "example": "7"
+                    }             
+                  }
+                }
+              },
+            "example": {
+              "status": "success",
+              "code": 200,
+              "data": {
+                "amountOfRightAnswers": 5
+              }
+            }  
+          }
+        },
+        
+      "ErrorBadRequest": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Error status",
+              "example": "error"
+              },
+            "code": {
+              "type": "interge",
+              "description": "Error code",
+              "example": "400"
+              },
+            "message": {
+              "type": "string",
+              "description": "Error message",
+              "example": "Error's message"
+              }
+          }
+        },
+      "ErrorUnauthorized": {
                 "type": "object",
                     "properties": {
                         "status": {
@@ -628,28 +673,38 @@
                             "example": "error"
                         },
                         "code": {
-                            "type": "string",
+                            "type": "interge",
                             "description": "Error code",
                             "example": "401"
                         },
-                        "data": {
-                            "type": "string",
-                            "description": "Error fata",
-                            "example": "Unauthorized"
-                        }
-                    }
-        },
-        "ErrorBadRequest": {
-                "type": "object",
-                    "properties": {
                         "message": {
                             "type": "string",
-                            "description": "Error message",
-                            "example": "error message"
+                            "description": "Error fata",
+                            "example": "User is unauthorized"
                         }
                     }
+        },      
+      "ErrorForbidden": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Response status",
+                        "example": "error"
+                    },
+                    "code": {
+                        "type": "interge",
+                        "description": "Response code",
+                        "example": "403"
+                    },    
+                    "message": {
+                        "type": "string",
+                        "description": "Response message",
+                        "example": "Access is denied"
+                    }
+                }    
         },
-        "ErrorInternalServer": {
+      "ErrorInternalServer": {
             "type": "object",
             "properties": {
                 "message": {
@@ -666,7 +721,9 @@
       "scheme": "bearer",
       "bearerFormat": "JWT"
       }
-    }    
+    }
   }
 }
+
+
 

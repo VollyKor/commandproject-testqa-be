@@ -2,9 +2,6 @@
 
 ## ToDo
 
-## write function that take 12 random questions from array
-## write function that compare answers, with right answer
-
 ### 1 Fix error obj in trycatch server.ts
 ### 2 check types at user interface S_interfaces.ts
 ### 3 check and fix problem with @types/bcryptjs in S_user
