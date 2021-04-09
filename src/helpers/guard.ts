@@ -8,7 +8,7 @@ const guard = ((req, res, next) => {
         return res.status(HttpCode.UNAUTHORIZED).json({
             status: 'error',
             code: HttpCode.UNAUTHORIZED,
-            data: 'Unauthorized',
+            message: 'User is unauthorized',
         })
     } 
 
@@ -18,7 +18,6 @@ const guard = ((req, res, next) => {
             return res.status(HttpCode.FORBIDDEN).json({
                 status: 'error',
                 code: HttpCode.FORBIDDEN,
-                data: 'Forbidden',
                 message: 'Access is denied',
             })
         }
