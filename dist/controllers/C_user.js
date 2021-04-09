@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const M_user_1 = __importDefault(require("../model/M_user"));
 const constants_1 = require("../helpers/constants");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const SECRET_KEY = process.env.JWT_SECRET;
 const reg = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {

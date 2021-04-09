@@ -6,15 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-require("./helpers/getuniqueQn");
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_json_1 = __importDefault(require("./swagger.json"));
 const constants_1 = require("./helpers/constants");
 const R_questions_1 = __importDefault(require("./routes/questions/R_questions"));
 const users_1 = __importDefault(require("./routes/users/users"));
+const R_auth_1 = __importDefault(require("./routes/auth/R_auth"));
 dotenv_1.default.config();
-// example of import from .js to .ts files
-// =================================
-// import { example } from './controllers/user'
-// console.log(example);
 const app = express_1.default();
 app.use(cors_1.default());
 app.use(express_1.default.json());
@@ -23,9 +21,12 @@ app.use(express_1.default.static(constants_1.PUBLIC_FOLDER_PATH()));
 // ================================
 app.use('/test', R_questions_1.default);
 app.use('/users', users_1.default);
+app.use('/auth', R_auth_1.default);
 app.get('/', (_, response) => {
     response.send('Hello world!');
 });
+// Path for swagger
+app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
 // Error handle
 // =================================
 app.use((req, res) => {

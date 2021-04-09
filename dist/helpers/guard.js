@@ -11,7 +11,7 @@ const guard = ((req, res, next) => {
         return res.status(constants_1.HttpCode.UNAUTHORIZED).json({
             status: 'error',
             code: constants_1.HttpCode.UNAUTHORIZED,
-            data: 'Unauthorized',
+            message: 'User is unauthorized',
         });
     }
     passport_1.default.authenticate('jwt', { session: false }, (err, user) => {
@@ -21,7 +21,6 @@ const guard = ((req, res, next) => {
             return res.status(constants_1.HttpCode.FORBIDDEN).json({
                 status: 'error',
                 code: constants_1.HttpCode.FORBIDDEN,
-                data: 'Forbidden',
                 message: 'Access is denied',
             });
         }

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PUBLIC_FOLDER_PATH = exports.LOG_LEVEL = exports.PORT = exports.SALT_WORK_FACTOR = exports.testType = exports.HttpCode = void 0;
+exports.PUBLIC_FOLDER_PATH = exports.LOG_LEVEL = exports.PORT = exports.SALT_WORK_FACTOR = exports.reqGoogleUserData = exports.reqGoogleUserEmail = exports.testType = exports.HttpCode = void 0;
 const path_1 = __importDefault(require("path"));
 var HttpCode;
 (function (HttpCode) {
@@ -23,7 +23,13 @@ var testType;
     testType["TESTTHEORY"] = "testTheory";
     testType["COMMON"] = "common";
 })(testType = exports.testType || (exports.testType = {}));
+exports.reqGoogleUserEmail = 'https://www.googleapis.com/auth/userinfo.email';
+exports.reqGoogleUserData = 'https://www.googleapis.com/auth/userinfo.profile';
 exports.SALT_WORK_FACTOR = 8;
+// local env vars
+// ============================
+// BASE_URL=http://localhost:3010
+// FRONT_END_URL=http://localhost:3000
 exports.PORT = '3010';
 exports.LOG_LEVEL = 'DEBUG';
 const PUBLIC_FOLDER_PATH = () => path_1.default.join(process.cwd(), 'public');
