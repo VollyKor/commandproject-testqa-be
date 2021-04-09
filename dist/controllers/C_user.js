@@ -49,7 +49,6 @@ const login = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         const { email, password } = req.body;
         const user = yield M_user_1.default.findByEmail(email);
         const isValidPassword = yield (user === null || user === void 0 ? void 0 : user.validPassword(password));
-        console.log('isValidPassword', isValidPassword);
         if (!user || !isValidPassword) {
             return res.status(constants_1.HttpCode.UNAUTHORIZED).json({
                 status: 'error',
@@ -59,13 +58,15 @@ const login = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             });
         }
         const payload = { id: user._id };
-        const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '2h' });
+        const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+        const refreshToken = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '7d' });
         M_user_1.default.updateToken(user._id, token);
         return res.status(constants_1.HttpCode.OK).json({
             status: 'success',
             code: constants_1.HttpCode.OK,
             data: {
                 token,
+                refreshToken,
                 email,
             },
         });

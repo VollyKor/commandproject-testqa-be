@@ -37,13 +37,15 @@ const axios_1 = __importDefault(require("axios"));
 const constants_1 = require("../helpers/constants");
 const M_google_user_1 = require("../model/M_google-user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3010/';
-const FRONT_END_URL = process.env.FRONT_END_URL || 'http://localhost:3000/';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3010';
+const FRONT_END_URL = process.env.FRONT_END_URL || 'http://localhost:3000';
 const SECRET_KEY = process.env.JWT_SECRET;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 exports.googleAuth = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const stringifiedParams = qS.stringify({
-            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_id: GOOGLE_CLIENT_ID,
             redirect_uri: `${BASE_URL}/auth/google-redirect`,
             scope: [constants_1.reqGoogleUserEmail, constants_1.reqGoogleUserData].join(' '),
             response_type: 'code',
@@ -65,8 +67,8 @@ exports.googleRedirect = ((req, res) => __awaiter(void 0, void 0, void 0, functi
         url: `https://oauth2.googleapis.com/token`,
         method: 'post',
         data: {
-            client_id: process.env.GOOGLE_CLIENT_ID,
-            client_secret: process.env.GOOGLE_CLIENT_SECRET,
+            client_id: GOOGLE_CLIENT_ID,
+            client_secret: GOOGLE_CLIENT_SECRET,
             redirect_uri: `${BASE_URL}/auth/google-redirect`,
             grant_type: 'authorization_code',
             code,
@@ -80,7 +82,7 @@ exports.googleRedirect = ((req, res) => __awaiter(void 0, void 0, void 0, functi
         },
     });
     const user = yield M_google_user_1.createOrUpdateGoogleUser(userData);
-    const payload = { id: user._id };
+    const payload = { id: user._id, googleReg: GOOGLE_CLIENT_SECRET };
     const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1h' });
     const refreshToken = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '7d' });
     const urlString = qS.stringifyUrl({

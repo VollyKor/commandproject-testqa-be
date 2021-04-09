@@ -1,9 +1,7 @@
-import { Igoogleuser } from '../types/interfaces';
-import Session from './schema/S_sessionId';
-import User from './schema/S_user';
+import { IgoogleUser } from '../types/interfaces';
 import GoogleUser from './schema/S_googleUser';
 
-export const createOrUpdateGoogleUser = async (data: Igoogleuser) => {
+export const createOrUpdateGoogleUser = async (data: IgoogleUser) => {
   const [user] = await GoogleUser.find({ email: data.email });
 
   if (!user) {
@@ -21,8 +19,12 @@ export const createOrUpdateGoogleUser = async (data: Igoogleuser) => {
   );
 
   const [updatedUser] = await GoogleUser.find({ email: data.email });
-
   return updatedUser;
 };
 
-export default { createOrUpdateGoogleUser };
+export const find = id => {
+  const user = GoogleUser.findById(id);
+  return user;
+};
+
+export default { createOrUpdateGoogleUser, find };

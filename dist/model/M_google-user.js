@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createOrUpdateGoogleUser = void 0;
+exports.find = exports.createOrUpdateGoogleUser = void 0;
 const S_googleUser_1 = __importDefault(require("./schema/S_googleUser"));
 const createOrUpdateGoogleUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const [user] = yield S_googleUser_1.default.find({ email: data.email });
@@ -26,5 +26,10 @@ const createOrUpdateGoogleUser = (data) => __awaiter(void 0, void 0, void 0, fun
     return updatedUser;
 });
 exports.createOrUpdateGoogleUser = createOrUpdateGoogleUser;
-exports.default = { createOrUpdateGoogleUser: exports.createOrUpdateGoogleUser };
+const find = id => {
+    const user = S_googleUser_1.default.findById(id);
+    return user;
+};
+exports.find = find;
+exports.default = { createOrUpdateGoogleUser: exports.createOrUpdateGoogleUser, find: exports.find };
 //# sourceMappingURL=M_google-user.js.map

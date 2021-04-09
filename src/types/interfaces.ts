@@ -51,7 +51,7 @@ export interface IFindUserByValue<Value> {
 // export type TupdateToken = (id: string , token:string) => Promise<IUser>
 export type TupdateToken = (id: string, token: string) => void;
 
-export interface Igoogleuser {
+export interface IgoogleUser {
   googleUserId: string;
   email: string;
   verified_email?: boolean;
