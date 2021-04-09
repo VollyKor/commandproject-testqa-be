@@ -2,9 +2,7 @@ import jwt from 'jsonwebtoken';
 import Users from '../model/M_user';
 import { HttpCode } from '../helpers/constants';
 import { RequestHandler } from 'express-serve-static-core';
-import dotenv from 'dotenv';
 
-dotenv.config();
 const SECRET_KEY = process.env.JWT_SECRET;
 
 interface Ireg {
@@ -50,7 +48,6 @@ const login = (async (req, res, next) => {
     const user = await Users.findByEmail(email);
 
     const isValidPassword = await user?.validPassword(password);
-    console.log('isValidPassword', isValidPassword);
 
     if (!user || !isValidPassword) {
       return res.status(HttpCode.UNAUTHORIZED).json({
@@ -62,7 +59,8 @@ const login = (async (req, res, next) => {
     }
 
     const payload = { id: user._id };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
 
     Users.updateToken(user._id, token);
 
@@ -71,6 +69,7 @@ const login = (async (req, res, next) => {
       code: HttpCode.OK,
       data: {
         token,
+        refreshToken,
         email,
       },
     });

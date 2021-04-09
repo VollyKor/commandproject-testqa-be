@@ -42,18 +42,13 @@ const UserSchema = new mongoose_1.Schema({
         type: Object,
         default: {
             qaResult: null,
-            testTheoryResult: null
-        }
+            testTheoryResult: null,
+        },
     },
     refreshToken: {
         type: String,
         default: null,
         // required: [true, 'Refresh token required'],
-    },
-    sessionId: {
-        type: String,
-        default: null,
-        // required: [true, 'sessionId required'],
     },
 }, { versionKey: false, timestamps: true });
 // Document middlewares
@@ -74,6 +69,6 @@ UserSchema.methods.validPassword = function (password) {
         return isValidPassword;
     });
 };
-const User = mongoose_1.model("user", UserSchema);
+const User = mongoose_1.model('user', UserSchema);
 exports.default = User;
 //# sourceMappingURL=S_user.js.map

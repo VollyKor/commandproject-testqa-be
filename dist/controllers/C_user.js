@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const M_user_1 = __importDefault(require("../model/M_user"));
 const constants_1 = require("../helpers/constants");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 const SECRET_KEY = process.env.JWT_SECRET;
 const reg = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -51,7 +49,6 @@ const login = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         const { email, password } = req.body;
         const user = yield M_user_1.default.findByEmail(email);
         const isValidPassword = yield (user === null || user === void 0 ? void 0 : user.validPassword(password));
-        console.log('isValidPassword', isValidPassword);
         if (!user || !isValidPassword) {
             return res.status(constants_1.HttpCode.UNAUTHORIZED).json({
                 status: 'error',
@@ -61,13 +58,15 @@ const login = ((req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             });
         }
         const payload = { id: user._id };
-        const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '2h' });
+        const token = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+        const refreshToken = jsonwebtoken_1.default.sign(payload, SECRET_KEY, { expiresIn: '7d' });
         M_user_1.default.updateToken(user._id, token);
         return res.status(constants_1.HttpCode.OK).json({
             status: 'success',
             code: constants_1.HttpCode.OK,
             data: {
                 token,
+                refreshToken,
                 email,
             },
         });
