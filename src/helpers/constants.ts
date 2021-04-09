@@ -27,8 +27,12 @@ export const reqGoogleUserData =
 
 export const SALT_WORK_FACTOR = 8;
 
+// local env vars
+// ============================
+// BASE_URL=http://localhost:3010
+// FRONT_END_URL=http://localhost:3000
 export const PORT = '3010';
 export const LOG_LEVEL = 'DEBUG';
 
-type fn = () => string;
-export const PUBLIC_FOLDER_PATH: fn = () => path.join(process.cwd(), 'public');
+export const PUBLIC_FOLDER_PATH = (): string =>
+  path.join(process.cwd(), 'public');

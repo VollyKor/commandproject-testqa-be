@@ -2,9 +2,7 @@ import jwt from 'jsonwebtoken';
 import Users from '../model/M_user';
 import { HttpCode } from '../helpers/constants';
 import { RequestHandler } from 'express-serve-static-core';
-import dotenv from 'dotenv';
 
-dotenv.config();
 const SECRET_KEY = process.env.JWT_SECRET;
 
 interface Ireg {
