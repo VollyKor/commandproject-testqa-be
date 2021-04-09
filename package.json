@@ -12,7 +12,11 @@
     "start": "node .",
     "start:dev": "ts-node-dev --respawn --transpile-only src/bin/server.ts",
     "lint": "eslint --no-cache --ext .ts .",
-    "lint:fix": "eslint --no-cache --ext .ts . --fix"
+    "lint:fix": "eslint --no-cache --ext .ts . --fix",
+    "prebuild": "npm run swagger",
+    "swagger": "tsoa spec",
+    "predev": "npm run swagger",
+    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec\""
   },
   "author": "VolKor",
   "license": "ISC",
@@ -41,6 +45,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-json": "^2.1.2",
     "express": "^4.17.1",
+    "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "log4js": "^6.3.0",
     "mongoose": "^5.12.3",
