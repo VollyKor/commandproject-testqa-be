@@ -35,10 +35,11 @@ app.use((req, res) => {
   res.status(HttpCode.NOT_FOUND).json({ message: 'Not found app' });
 });
 
-app.use(((err, _, res, next) => {
-  if (err.status === HttpCode.BAD_REQUEST) {
-    return res.status(HttpCode.BAD_REQUEST).json(err);
+app.use(((err, _, res, next) => {  
+  if (err.code === HttpCode.BAD_REQUEST) {   
+    return res.status(HttpCode.BAD_REQUEST).json(err)
   }
+      
   res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
 }) as ErrorRequestHandler);
 
