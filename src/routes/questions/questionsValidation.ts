@@ -1,14 +1,21 @@
 import Joi from 'joi';
-import {RequestHandler} from 'express-serve-static-core'
+import { RequestHandler } from 'express-serve-static-core';
 import { HttpCode } from '../../helpers/constants';
 
 const answersSchema = Joi.object().keys({
-     type: Joi.string().valid('qa', 'testTheory', 'common').required(),
-    answers: Joi.array().items(Joi.string()).required()
+  type: Joi.string().valid('qa', 'testTheory', 'common').required(),
+  answers: Joi.array()
+    .items(
+      Joi.object().keys({
+        _id: Joi.string(),
+        answer: Joi.string(),
+      }),
+    )
+    .required(),
 });
 
 const validate = (schema, obj, next) => {
-  const { error } = schema.validate(obj);  
+  const { error } = schema.validate(obj);
   if (error) {
     const [{ message }] = error.details;
     return next({
@@ -18,8 +25,8 @@ const validate = (schema, obj, next) => {
     });
   }
   next();
-}
+};
 
-export const answersValidation = (((req, res, next) => {
-  return validate(answersSchema, req.body, next)
-}) as RequestHandler)
+export const answersValidation = ((req, res, next) => {
+  return validate(answersSchema, req.body, next);
+}) as RequestHandler;
