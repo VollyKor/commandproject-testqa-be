@@ -85,6 +85,13 @@ const compareAnswers = ((req, res, next) => __awaiter(void 0, void 0, void 0, fu
         const answers = req.body.answers;
         const questions = yield M_questions_1.default.getByType(req.body.type);
         const amount = fn.countRightAnswears(questions, answers);
+        if (amount === undefined) {
+            res.status(constants_1.HttpCode.BAD_REQUEST).json({
+                status: 'error',
+                code: constants_1.HttpCode.BAD_REQUEST,
+                message: 'Something wrong with questions',
+            });
+        }
         res.status(constants_1.HttpCode.OK).json({
             status: 'success',
             code: 200,

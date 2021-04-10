@@ -17,7 +17,7 @@ const guard = ((req, res, next) => {
     passport_1.default.authenticate('jwt', { session: false }, (err, user) => {
         var _a;
         const token = (_a = req.get('Authorization')) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
-        if (!user || err || token !== user.token) {
+        if (err || !token) {
             return res.status(constants_1.HttpCode.FORBIDDEN).json({
                 status: 'error',
                 code: constants_1.HttpCode.FORBIDDEN,

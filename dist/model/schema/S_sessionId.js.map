@@ -1,0 +1,1 @@
+{"version":3,"file":"S_sessionId.js","sourceRoot":"","sources":["../../../src/model/schema/S_sessionId.ts"],"names":[],"mappings":";;AAAA,uCAAsD;AAEtD,MAAM,aAAa,GAAG,IAAI,iBAAM,CAC9B;IACE,IAAI,EAAE;QACJ,IAAI,EAAE,sBAAW,CAAC,QAAQ;QAC1B,GAAG,EAAE,MAAM;KACZ;CACF,EACD,EAAE,UAAU,EAAE,KAAK,EAAE,CACtB,CAAC;AAEF,MAAM,OAAO,GAAG,gBAAK,CAAC,SAAS,EAAE,aAAa,CAAC,CAAC;AAEhD,kBAAe,OAAO,CAAC"}
