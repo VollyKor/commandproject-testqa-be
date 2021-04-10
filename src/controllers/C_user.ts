@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import Users from '../model/M_user';
 import { HttpCode } from '../helpers/constants';
 import { RequestHandler } from 'express-serve-static-core';
+import * as Session from '../model/M_session';
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -57,8 +58,9 @@ const login = (async (req, res, next) => {
         message: 'Invalid credentials',
       });
     }
+    const session = await Session.create(user._id);
 
-    const payload = { id: user._id };
+    const payload = { id: user._id, sessionId: session._id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
     const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
 
@@ -83,13 +85,16 @@ const logout = (async (req, res, next) => {
     // const id: string = req.user.id
     const { id } = req.body.user;
     Users.updateToken(id, null);
+
+    Session.remove(id);
+
     return res.status(HttpCode.NO_CONTENT).json();
   } catch (error) {
     next(error);
   }
 }) as RequestHandler;
 
-const current = (async (req, res, next) => {
+const current = (async (req, res) => {
   const token = req.get('Authorization').slice(7);
   const { email, name } = await Users.findByToken(token);
   return res.status(200).json({

@@ -7,8 +7,10 @@ const SessionSchema = new Schema(
       ref: 'user',
     },
   },
-  { versionKey: false },
+  { versionKey: false, timestamps: true },
 );
+
+SessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
 
 const Session = model('session', SessionSchema);
 

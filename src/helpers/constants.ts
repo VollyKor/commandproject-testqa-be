@@ -20,6 +20,11 @@ export enum testType {
   COMMON = 'common',
 }
 
+export enum statusCode {
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
 export const reqGoogleUserEmail =
   'https://www.googleapis.com/auth/userinfo.email';
 export const reqGoogleUserData =

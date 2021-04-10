@@ -1,9 +1,12 @@
 import Joi from 'joi';
 import { RequestHandler } from 'express-serve-static-core';
 import { HttpCode } from '../../helpers/constants';
+import { testType } from '../../helpers/constants';
 
 const answersSchema = Joi.object().keys({
-  type: Joi.string().valid('qa', 'testTheory', 'common').required(),
+  type: Joi.string()
+    .valid(testType.COMMON, testType.QA, testType.TESTTHEORY)
+    .required(),
   answers: Joi.array()
     .items(
       Joi.object().keys({

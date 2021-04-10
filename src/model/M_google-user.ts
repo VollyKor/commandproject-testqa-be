@@ -22,7 +22,7 @@ export const createOrUpdateGoogleUser = async (data: IgoogleUser) => {
   return updatedUser;
 };
 
-export const find = id => {
+export const find = (id: string) => {
   const user = GoogleUser.findById(id);
   return user;
 };

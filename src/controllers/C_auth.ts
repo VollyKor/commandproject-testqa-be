@@ -1,7 +1,13 @@
 import { RequestHandler } from 'express-serve-static-core';
 import * as qS from 'query-string';
 import axios from 'axios';
-import { reqGoogleUserEmail, reqGoogleUserData } from '../helpers/constants';
+import * as Session from '../model/M_session';
+import {
+  reqGoogleUserEmail,
+  reqGoogleUserData,
+  HttpCode,
+  statusCode,
+} from '../helpers/constants';
 import { createOrUpdateGoogleUser } from '../model/M_google-user';
 import jwt from 'jsonwebtoken';
 
@@ -35,6 +41,7 @@ export const googleRedirect = (async (req, res) => {
 
   const urlParams = qS.parse(urlObj.search);
   const code = urlParams.code;
+
   const tokenData = await axios({
     url: `https://oauth2.googleapis.com/token`,
     method: 'post',
@@ -56,8 +63,14 @@ export const googleRedirect = (async (req, res) => {
   });
 
   const user = await createOrUpdateGoogleUser(userData);
+  const session = await Session.create(user._id);
 
-  const payload = { id: user._id, googleReg: GOOGLE_CLIENT_SECRET };
+  const payload = {
+    id: user._id,
+    sessionId: session._id,
+    googleAuth: true,
+  };
+
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
   const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
 
@@ -71,4 +84,37 @@ export const googleRedirect = (async (req, res) => {
   });
 
   return res.redirect(urlString);
+}) as RequestHandler;
+
+export const refreshTokens = (async (req, res) => {
+  try {
+    const user = req.body.user;
+
+    if (!user) {
+      return res.status(HttpCode.BAD_REQUEST).json({
+        status: statusCode.ERROR,
+        code: HttpCode.BAD_REQUEST,
+        message: 'Bad request',
+      });
+    }
+
+    const payload = {
+      userid: user._id,
+      sessionId: user.sessionId,
+    };
+    console.log('payload in refreshToken rout', payload);
+
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
+
+    res.status(HttpCode.OK).json({
+      status: statusCode.SUCCESS,
+      code: HttpCode.OK,
+      data: { token, refreshToken, email: user.email },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  return console.log('refreshTokens');
 }) as RequestHandler;

@@ -4,10 +4,10 @@ import GoogleUser from '../model/M_google-user';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 
 import dotenv from 'dotenv';
+import Session from '../model/schema/S_session';
 dotenv.config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 const params = {
   secretOrKey: SECRET_KEY,
@@ -17,22 +17,40 @@ const params = {
 passport.use(
   new Strategy(params, async (payload, done) => {
     try {
-      if (payload.googleReg === GOOGLE_CLIENT_SECRET) {
-        const user = await GoogleUser.find(payload.id);
-        if (!user) {
+      const session = Session.findById(payload.sessionId);
+
+      if (payload.googleAuth) {
+        const user = GoogleUser.find(payload.id);
+
+        const promises = await Promise.all([user, session]);
+        console.log('promises google auth', promises);
+
+        if (!user && !session) {
           return done(new Error('User not found'));
         }
-        return done(null, user);
-      } else {
-        const user = await User.findById(payload.id);
-        if (!user) {
-          return done(new Error('User not found'));
-        }
-        if (!user.token) {
-          return done(null, false);
-        }
-        return done(null, user);
+
+        const userwithSessionId = {
+          ...user,
+          sessionId: payload.sessionId,
+        };
+
+        return done(null, userwithSessionId);
       }
+
+      const user = await User.findById(payload.id);
+      const promises = await Promise.all([user, session]);
+      console.log('promises auth', promises);
+
+      if (!user && !session) {
+        return done(new Error('User not found'));
+      }
+
+      const userwithSessionId = {
+        ...user,
+        sessionId: payload.sessionId,
+      };
+
+      return done(null, userwithSessionId);
     } catch (err) {
       done(err);
     }
