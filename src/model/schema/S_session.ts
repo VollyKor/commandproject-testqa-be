@@ -13,9 +13,6 @@ const SessionSchema = new Schema<IsessionDocument, TsessionModel>(
 
 SessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
 
-const Session = model<IsessionDocument, TsessionModel>(
-  'session',
-  SessionSchema,
-);
+const Session = model('session', SessionSchema);
 
 export default Session;

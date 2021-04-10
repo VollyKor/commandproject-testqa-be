@@ -26,6 +26,6 @@ const QuestionSchema = new Schema<IqnDocument, TqnModel>(
   { versionKey: false, timestamps: true },
 );
 
-const Question = model<IqnDocument, TqnModel>('question', QuestionSchema);
+const Question = model('question', QuestionSchema);
 
 export default Question;

@@ -41,7 +41,7 @@ const UserSchema = new Schema<IuserDocument, TuserModel>(
 );
 
 // Document middlewares
-UserSchema.pre<IuserDocument>('save', async function (next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
@@ -60,6 +60,6 @@ UserSchema.methods.validPassword = async function (password: string) {
   return isValidPassword;
 };
 
-const User = model<IuserDocument, TuserModel>('user', UserSchema);
+const User = model('user', UserSchema);
 
 export default User;

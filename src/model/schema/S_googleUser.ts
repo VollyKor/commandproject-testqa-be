@@ -45,11 +45,6 @@ const GoogleUserSchema = new Schema<IgoogleUserDocument, TgoogleUserModel>(
   { versionKey: false, timestamps: true },
 );
 
-// Document middlewares
-
-const GoogleUser = model<IgoogleUserDocument, TgoogleUserModel>(
-  'google-user',
-  GoogleUserSchema,
-);
+const GoogleUser = model('google-user', GoogleUserSchema);
 
 export default GoogleUser;
