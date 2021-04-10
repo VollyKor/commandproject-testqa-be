@@ -1,7 +1,7 @@
 import { model, Schema, SchemaTypes } from 'mongoose';
-import { IgoogleUserDocument, TgoogleUserModel } from '../../types/interfaces';
+import { IgoogleUser, TgoogleUserModel } from '../../types/interfaces';
 
-const GoogleUserSchema = new Schema<IgoogleUserDocument, TgoogleUserModel>(
+const GoogleUserSchema = new Schema<IgoogleUser, TgoogleUserModel>(
   {
     googleUserId: {
       type: String,

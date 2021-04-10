@@ -3,15 +3,18 @@ import { testType } from '../helpers/constants';
 
 //  User Interfaces
 // ===========================================
-export type TuserModel = Model<IuserDocument>;
+export type TuserModel = Model<Iuser>;
 
-export interface InewUser {
-  name: string;
+export interface Ilogin {
   email: string;
   password: string;
 }
 
-export interface Iuser {
+export interface InewUser extends Ilogin {
+  name: string;
+}
+
+export interface IdbUser {
   name: string;
   email: string;
   results?: {
@@ -21,9 +24,8 @@ export interface Iuser {
   refreshToken?: string;
 }
 
-export interface IuserDocument extends Iuser, Document {
+export interface Iuser extends IdbUser, Document {
   password: string;
-  _id: string;
   validPassword(password: string): boolean;
 }
 // ===========================================
@@ -33,9 +35,7 @@ export interface IuserDocument extends Iuser, Document {
 // ===========================================
 export type TsessionModel = Model<IsessionDocument>;
 
-export interface IsessionDocument extends Isession, Document {
-  _id: string;
-}
+export interface IsessionDocument extends Isession, Document {}
 
 export interface Isession {
   userId: string;
@@ -45,34 +45,27 @@ export interface Isession {
 
 //  Question Interfaces
 // ===========================================
-export type TqnModel = Model<IqnDocument>;
+export type TqnModel = Model<Iquestion>;
 
-export interface IqnDocument extends Iquestion, Document {
-  _id: string;
-}
+export interface Iquestion extends InewQuestion, Document {}
 
-export interface Iquestion {
+export interface InewQuestion {
   type: testType;
   answers: string[];
   question: string[];
   rightAnswer: string;
 }
 
-export interface IqnDocument extends Iquestion, Document {
-  _id: string;
-}
 // ===========================================
 // ===========================================
 
 //  GoogleUser Interfaces
 // ===========================================
-export type TgoogleUserModel = Model<IgoogleUserDocument>;
+export type TgoogleUserModel = Model<IgoogleUser>;
 
-export interface IgoogleUserDocument extends IgoogleUser, Document {
-  _id: string;
-}
+export interface IgoogleUser extends IdbGoogleUser, Document {}
 
-export interface IgoogleUser {
+export interface IdbGoogleUser {
   googleUserId: string;
   email: string;
   verified_email?: boolean;
@@ -86,5 +79,17 @@ export interface IgoogleUser {
 
 //  User Types
 // =====================================================================
-export type TfindUserByValue = (value: string) => Promise<IuserDocument>;
-export type TcreateUser = (newuser: InewUser) => Promise<IuserDocument>;
+export type TfindUserByValue = (value: string) => Promise<Iuser>;
+export type TcreateUser = (newuser: InewUser) => Promise<Iuser>;
+
+// Answer Validation
+// ==============================================
+export interface Ianswer {
+  _id: string;
+  answer: string;
+}
+
+export interface Ianswers {
+  type: string;
+  answers: Ianswer[];
+}

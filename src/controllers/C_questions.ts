@@ -1,11 +1,10 @@
 import { RequestHandler } from 'express-serve-static-core';
 import Questions from '../model/M_questions';
 import { HttpCode, testType } from '../helpers/constants';
-import { getuniqueQns } from '../helpers/getuniqueQn';
-import * as fn from '../helpers/compareAnswersFn';
-import { Request } from 'express';
+import getuniqueQns from '../helpers/getuniqueQn';
+import countRightAnswears from '../helpers/compareAnswersFn';
 
-const getAll = (async (req, res, next) => {
+const getAll = (async (_, res, next) => {
   try {
     const data = await Questions.getAll();
     return res.json({
@@ -60,16 +59,12 @@ interface IreqAnswer {
   answers: string[];
 }
 
-const compareAnswers = (async (
-  req: Request<unknown, unknown, IreqAnswer>,
-  res,
-  next,
-) => {
+const compareAnswers = (async (req, res, next) => {
   try {
-    const answers: string[] = req.body.answers;
+    const answers = req.body.answers;
     const questions = await Questions.getByType(req.body.type);
 
-    const amount = fn.countRightAnswears(questions, answers);
+    const amount = countRightAnswears(questions, answers);
 
     if (amount === undefined) {
       res.status(HttpCode.BAD_REQUEST).json({
@@ -89,6 +84,6 @@ const compareAnswers = (async (
   } catch (error) {
     next(error);
   }
-}) as RequestHandler;
+}) as RequestHandler<unknown, unknown, IreqAnswer>;
 
 export default { getByType, getAll, compareAnswers };

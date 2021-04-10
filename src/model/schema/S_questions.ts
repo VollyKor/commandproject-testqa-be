@@ -1,9 +1,9 @@
 import { model, Schema } from 'mongoose';
 import { testType } from '../../helpers/constants';
 
-import { IqnDocument, TqnModel } from '../../types/interfaces';
+import { Iquestion, TqnModel } from '../../types/interfaces';
 
-const QuestionSchema = new Schema<IqnDocument, TqnModel>(
+const QuestionSchema = new Schema<Iquestion, TqnModel>(
   {
     type: {
       type: String,

@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import { model, Schema } from 'mongoose';
-import { IuserDocument, TuserModel } from '../../types/interfaces';
+import { Iuser, TuserModel } from '../../types/interfaces';
 import { SALT_WORK_FACTOR } from '../../helpers/constants';
 
-const UserSchema = new Schema<IuserDocument, TuserModel>(
+const UserSchema = new Schema<Iuser, TuserModel>(
   {
     name: {
       type: String,

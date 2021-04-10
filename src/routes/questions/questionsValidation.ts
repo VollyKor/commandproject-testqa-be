@@ -1,9 +1,10 @@
 import Joi from 'joi';
-import { RequestHandler } from 'express-serve-static-core';
+import { NextFunction, RequestHandler } from 'express-serve-static-core';
 import { HttpCode } from '../../helpers/constants';
 import { testType } from '../../helpers/constants';
+import { Ianswers } from '../../types/interfaces';
 
-const answersSchema = Joi.object().keys({
+const answersSchema: Joi.ObjectSchema<Ianswers> = Joi.object().keys({
   type: Joi.string()
     .valid(testType.COMMON, testType.QA, testType.TESTTHEORY)
     .required(),
@@ -17,7 +18,7 @@ const answersSchema = Joi.object().keys({
     .required(),
 });
 
-const validate = (schema, obj, next) => {
+function validate<T>(schema: Joi.ObjectSchema, obj: T, next: NextFunction) {
   const { error } = schema.validate(obj);
   if (error) {
     const [{ message }] = error.details;
@@ -28,8 +29,8 @@ const validate = (schema, obj, next) => {
     });
   }
   next();
-};
+}
 
 export const answersValidation = ((req, _, next) => {
-  return validate(answersSchema, req.body, next);
+  return validate<Ianswers>(answersSchema, req.body, next);
 }) as RequestHandler;

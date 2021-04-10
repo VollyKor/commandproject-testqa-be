@@ -43,7 +43,9 @@ export const SALT_WORK_FACTOR = 8;
 // BASE_URL=http://localhost:3010
 // FRONT_END_URL=http://localhost:3000
 export const PORT = '3010';
-export const LOG_LEVEL = 'DEBUG';
+
+//  LOG_LEVEL = 'debug' | 'info' | 'error'
+export const LOG_LEVEL = 'INFO';
 
 export const PUBLIC_FOLDER_PATH = (): string =>
   path.join(process.cwd(), 'public');

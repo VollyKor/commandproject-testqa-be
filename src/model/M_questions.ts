@@ -7,7 +7,6 @@ const getAll = async (): Promise<Iquestion[]> => {
 
   return questions;
 };
-
 const getByType = async (type: testType): Promise<Iquestion[]> => {
   const questions: Iquestion[] = await Questions.find({ type });
   return questions;
