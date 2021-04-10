@@ -1,6 +1,7 @@
+import { IsessionDocument } from '../types/interfaces';
 import Session from './schema/S_session';
 
-const create = async (userId: string) => {
+const create = async (userId: string): Promise<IsessionDocument> => {
   const newSession = await Session.create({ userId });
   newSession.save();
   return newSession;

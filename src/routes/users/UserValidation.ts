@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import { RequestHandler } from 'express-serve-static-core';
-
-import { HttpCode } from '../../helpers/constants';
+import { HttpCode, statusCode } from '../../helpers/constants';
 
 const registerUserSchema = Joi.object().keys({
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
@@ -19,7 +18,7 @@ const validate = (schema, obj, next) => {
   if (error) {
     const [{ message }] = error.details;
     return next({
-      status: 'error',
+      status: statusCode.ERROR,
       code: HttpCode.BAD_REQUEST,
       message: `${message.replace(/"/g, '')}`,
     });
@@ -27,10 +26,10 @@ const validate = (schema, obj, next) => {
   next();
 };
 
-export const registerUserValidation = ((req, res, next) => {
+export const registerUserValidation = ((req, _, next) => {
   return validate(registerUserSchema, req.body, next);
 }) as RequestHandler;
 
-export const loginUserValidation = ((req, res, next) => {
+export const loginUserValidation = ((req, _, next) => {
   return validate(loginUserSchema, req.body, next);
 }) as RequestHandler;

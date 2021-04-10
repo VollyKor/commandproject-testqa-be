@@ -1,21 +1,9 @@
 import { Document, Model } from 'mongoose';
 import { testType } from '../helpers/constants';
 
-export interface IUser {
-  // check types
-  name: string;
-  // _id: string,
-  email: string;
-  results?: {
-    qaResult: number | null;
-    testTheoryResult: number | null;
-  };
-  refreshToken?: string;
-  sessionId?: string;
-
-  // check types
-  token: string | null;
-}
+//  User Interfaces
+// ===========================================
+export type TuserModel = Model<IuserDocument>;
 
 export interface InewUser {
   name: string;
@@ -23,33 +11,66 @@ export interface InewUser {
   password: string;
 }
 
-// Export this for strong typing
-export interface UserDocument extends IUser, Document {
+export interface Iuser {
+  name: string;
+  email: string;
+  results?: {
+    qaResult: number | null;
+    testTheoryResult: number | null;
+  };
+  refreshToken?: string;
+}
+
+export interface IuserDocument extends Iuser, Document {
   password: string;
   _id: string;
   validPassword(password: string): boolean;
 }
+// ===========================================
+// ===========================================
 
-// For model
-export type UserModel = Model<UserDocument>;
+//  Session Interfaces
+// ===========================================
+export type TsessionModel = Model<IsessionDocument>;
 
-export interface Question {
+export interface IsessionDocument extends Isession, Document {
+  _id: string;
+}
+
+export interface Isession {
+  userId: string;
+}
+// ==============================================
+// ==============================================
+
+//  Question Interfaces
+// ===========================================
+export type TqnModel = Model<IqnDocument>;
+
+export interface IqnDocument extends Iquestion, Document {
+  _id: string;
+}
+
+export interface Iquestion {
   type: testType;
   answers: string[];
   question: string[];
   rightAnswer: string;
 }
 
-export interface qnDocument extends Question, Document {}
-
-export type qnModel = Model<qnDocument>;
-
-export interface IFindUserByValue<Value> {
-  (value: Value): Promise<UserDocument>;
+export interface IqnDocument extends Iquestion, Document {
+  _id: string;
 }
+// ===========================================
+// ===========================================
 
-// export type TupdateToken = (id: string , token:string) => Promise<IUser>
-export type TupdateToken = (id: string, token: string) => void;
+//  GoogleUser Interfaces
+// ===========================================
+export type TgoogleUserModel = Model<IgoogleUserDocument>;
+
+export interface IgoogleUserDocument extends IgoogleUser, Document {
+  _id: string;
+}
 
 export interface IgoogleUser {
   googleUserId: string;
@@ -59,5 +80,13 @@ export interface IgoogleUser {
   family_name?: string;
   picture?: string;
   locate?: string;
-  user_data?: IUser;
+}
+// ===========================================
+// ===========================================
+
+// export type TupdateToken = (id: string , token:string) => Promise<IUser>
+export type TupdateToken = (id: string, token: string) => void;
+
+export interface IfindUserByValue {
+  (value: string): Promise<IuserDocument>;
 }

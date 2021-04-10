@@ -35,7 +35,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Error handle
 // =================================
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(HttpCode.NOT_FOUND).json({ message: 'Not found app' });
 });
 

@@ -6,17 +6,21 @@ import * as Session from '../model/M_session';
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
-interface Ireg {
+interface Iregistration {
   email: string;
   name?: string;
+  password: string;
+}
+interface Ilogin {
+  email: string;
   password: string;
 }
 
 const reg = (async (req, res, next) => {
   try {
-    const { email, name } = req.body as Ireg;
+    const { email, name } = req.body as Iregistration;
 
-    const user = await Users.findByEmail(email);
+    const user = await Users.findByValue(email);
 
     if (user) {
       return res.status(HttpCode.CONFLICT).json({
@@ -45,8 +49,8 @@ const reg = (async (req, res, next) => {
 
 const login = (async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await Users.findByEmail(email);
+    const { email, password } = req.body as Ilogin;
+    const user = await Users.findByValue(email);
 
     const isValidPassword = await user?.validPassword(password);
 
@@ -82,21 +86,19 @@ const login = (async (req, res, next) => {
 
 const logout = (async (req, res, next) => {
   try {
-    // const id: string = req.user.id
     const { id } = req.body.user;
     Users.updateToken(id, null);
 
     Session.remove(id);
 
-    return res.status(HttpCode.NO_CONTENT).json();
+    return res.status(HttpCode.NO_CONTENT);
   } catch (error) {
     next(error);
   }
 }) as RequestHandler;
 
 const current = (async (req, res) => {
-  const token = req.get('Authorization').slice(7);
-  const { email, name } = await Users.findByToken(token);
+  const { name, email } = req.body.user;
   return res.status(200).json({
     email,
     name,

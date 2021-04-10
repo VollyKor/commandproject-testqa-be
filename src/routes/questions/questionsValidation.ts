@@ -30,6 +30,6 @@ const validate = (schema, obj, next) => {
   next();
 };
 
-export const answersValidation = ((req, res, next) => {
+export const answersValidation = ((req, _, next) => {
   return validate(answersSchema, req.body, next);
 }) as RequestHandler;

@@ -1,8 +1,9 @@
 import { model, Schema, SchemaTypes } from 'mongoose';
+import { IsessionDocument, TsessionModel } from '../../types/interfaces';
 
-const SessionSchema = new Schema(
+const SessionSchema = new Schema<IsessionDocument, TsessionModel>(
   {
-    user: {
+    userId: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
     },
@@ -12,6 +13,9 @@ const SessionSchema = new Schema(
 
 SessionSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
 
-const Session = model('session', SessionSchema);
+const Session = model<IsessionDocument, TsessionModel>(
+  'session',
+  SessionSchema,
+);
 
 export default Session;

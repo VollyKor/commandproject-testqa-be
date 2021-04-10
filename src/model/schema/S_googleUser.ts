@@ -1,7 +1,7 @@
 import { model, Schema, SchemaTypes } from 'mongoose';
-import { IUser, UserDocument, UserModel } from '../../types/interfaces';
+import { IgoogleUserDocument, TgoogleUserModel } from '../../types/interfaces';
 
-const GoogleUserSchema = new Schema(
+const GoogleUserSchema = new Schema<IgoogleUserDocument, TgoogleUserModel>(
   {
     googleUserId: {
       type: String,
@@ -36,6 +36,7 @@ const GoogleUserSchema = new Schema(
       type: String,
       default: null,
     },
+
     user_data: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
@@ -46,6 +47,9 @@ const GoogleUserSchema = new Schema(
 
 // Document middlewares
 
-const GoogleUser = model('google-user', GoogleUserSchema);
+const GoogleUser = model<IgoogleUserDocument, TgoogleUserModel>(
+  'google-user',
+  GoogleUserSchema,
+);
 
 export default GoogleUser;

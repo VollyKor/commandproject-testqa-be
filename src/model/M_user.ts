@@ -1,38 +1,33 @@
-import User from './schema/S_user'
-import {IFindUserByValue , TupdateToken, InewUser } from '../types/interfaces'
+import User from './schema/S_user';
+import { IfindUserByValue, TupdateToken, InewUser } from '../types/interfaces';
 
-const findByEmail: IFindUserByValue<string> = async email => {
-    const findedUser = await User.findOne({ email })
-    return findedUser
-}
+const findByValue: IfindUserByValue = async value => {
+  const user = await User.findOne({ value });
+  return user;
+};
 
-const findById: IFindUserByValue<string> = async id => {
-        const findedUser = await User.findOne({ _id: id })
-     return findedUser
-}
-const findByToken: IFindUserByValue<string> = async token => {
-    const findedUser = await User.findOne({ token })
-    return findedUser
-}
+const findById: IfindUserByValue = async _id => {
+  const findedUser = await User.findById(_id);
+  return findedUser;
+};
 
-const create = async ({ name, email, password } : InewUser) => {
-    const user = new User({ name, email, password })
-    const savedUser = await user.save()
-    return savedUser
-}
+const create = async ({ name, email, password }: InewUser) => {
+  const user = new User({ name, email, password });
+  const savedUser = await user.save();
+  return savedUser;
+};
 
 const updateToken: TupdateToken = async (id, token) => {
-    const uppdatedUser = await User.updateOne({ _id: id }, { token })
-    return uppdatedUser
-}
+  const uppdatedUser = await User.updateOne({ _id: id }, { token });
+  return uppdatedUser;
+};
 
 export default {
-    findByEmail,
-    findById,
-    findByToken,
-    create,
-    updateToken,
-}
+  findByValue,
+  findById,
+  create,
+  updateToken,
+};
 
 // const verify = async (req, res, next) => {
 //     const id = req.user.id
