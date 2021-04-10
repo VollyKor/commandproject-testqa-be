@@ -20,7 +20,7 @@ const reg = (async (req, res, next) => {
   try {
     const { email, name } = req.body as Iregistration;
 
-    const user = await Users.findByValue(email);
+    const user = await Users.findByEmail(email);
 
     if (user) {
       return res.status(HttpCode.CONFLICT).json({
@@ -50,7 +50,7 @@ const reg = (async (req, res, next) => {
 const login = (async (req, res, next) => {
   try {
     const { email, password } = req.body as Ilogin;
-    const user = await Users.findByValue(email);
+    const user = await Users.findByEmail(email);
 
     const isValidPassword = await user?.validPassword(password);
 
@@ -67,8 +67,6 @@ const login = (async (req, res, next) => {
     const payload = { id: user._id, sessionId: session._id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
     const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
-
-    Users.updateToken(user._id, token);
 
     return res.status(HttpCode.OK).json({
       status: 'success',
@@ -87,8 +85,6 @@ const login = (async (req, res, next) => {
 const logout = (async (req, res, next) => {
   try {
     const { id } = req.body.user;
-    Users.updateToken(id, null);
-
     Session.remove(id);
 
     return res.status(HttpCode.NO_CONTENT);

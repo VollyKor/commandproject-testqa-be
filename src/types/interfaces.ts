@@ -84,9 +84,7 @@ export interface IgoogleUser {
 // ===========================================
 // ===========================================
 
-// export type TupdateToken = (id: string , token:string) => Promise<IUser>
-export type TupdateToken = (id: string, token: string) => void;
-
-export interface IfindUserByValue {
-  (value: string): Promise<IuserDocument>;
-}
+//  User Types
+// =====================================================================
+export type TfindUserByValue = (value: string) => Promise<IuserDocument>;
+export type TcreateUser = (newuser: InewUser) => Promise<IuserDocument>;

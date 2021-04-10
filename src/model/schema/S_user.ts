@@ -24,10 +24,6 @@ const UserSchema = new Schema<IuserDocument, TuserModel>(
       type: String,
       required: [true, 'Password required'],
     },
-    token: {
-      type: String,
-      default: null,
-    },
 
     results: {
       type: Object.keys({
