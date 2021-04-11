@@ -1,25 +1,25 @@
 import Joi from 'joi';
-import { RequestHandler } from 'express-serve-static-core';
+import { NextFunction, RequestHandler } from 'express-serve-static-core';
+import { HttpCode, statusCode } from '../../types/enums';
+import { InewUser, Ilogin } from '../../types/interfaces';
 
-import { HttpCode } from '../../helpers/constants';
-
-const registerUserSchema = Joi.object().keys({
+const registerUserSchema: Joi.ObjectSchema<InewUser> = Joi.object().keys({
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
   password: Joi.string().min(6).max(24).required(),
   name: Joi.string().alphanum().min(2).max(16).optional(),
 });
 
-const loginUserSchema = Joi.object({
+const loginUserSchema: Joi.ObjectSchema<Ilogin> = Joi.object({
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
   password: Joi.string().min(6).max(24).required(),
 });
 
-const validate = (schema, obj, next) => {
+const validate = <T>(schema: Joi.ObjectSchema, obj: T, next: NextFunction) => {
   const { error } = schema.validate(obj);
   if (error) {
     const [{ message }] = error.details;
     return next({
-      status: 'error',
+      status: statusCode.ERROR,
       code: HttpCode.BAD_REQUEST,
       message: `${message.replace(/"/g, '')}`,
     });
@@ -27,10 +27,16 @@ const validate = (schema, obj, next) => {
   next();
 };
 
-export const registerUserValidation = ((req, res, next) => {
-  return validate(registerUserSchema, req.body, next);
+export type Tvalidate<T> = (
+  scema: Joi.ObjectSchema<T>,
+  obj: T,
+  next: NextFunction,
+) => void;
+
+export const registerUserValidation = ((req, _, next) => {
+  return validate<InewUser>(registerUserSchema, req.body, next);
 }) as RequestHandler;
 
-export const loginUserValidation = ((req, res, next) => {
-  return validate(loginUserSchema, req.body, next);
+export const loginUserValidation = ((req, _, next) => {
+  return validate<Ilogin>(loginUserSchema, req.body, next);
 }) as RequestHandler;

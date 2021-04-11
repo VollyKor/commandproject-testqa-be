@@ -1,9 +1,12 @@
 import Joi from 'joi';
-import { RequestHandler } from 'express-serve-static-core';
-import { HttpCode } from '../../helpers/constants';
+import { NextFunction, RequestHandler } from 'express-serve-static-core';
+import { testType, HttpCode } from '../../types/enums';
+import { Ianswers } from '../../types/interfaces';
 
-const answersSchema = Joi.object().keys({
-  type: Joi.string().valid('qa', 'testTheory', 'common').required(),
+const answersSchema: Joi.ObjectSchema<Ianswers> = Joi.object().keys({
+  type: Joi.string()
+    .valid(testType.COMMON, testType.QA, testType.TESTTHEORY)
+    .required(),
   answers: Joi.array()
     .items(
       Joi.object().keys({
@@ -14,7 +17,7 @@ const answersSchema = Joi.object().keys({
     .required(),
 });
 
-const validate = (schema, obj, next) => {
+function validate<T>(schema: Joi.ObjectSchema, obj: T, next: NextFunction) {
   const { error } = schema.validate(obj);
   if (error) {
     const [{ message }] = error.details;
@@ -25,8 +28,8 @@ const validate = (schema, obj, next) => {
     });
   }
   next();
-};
+}
 
-export const answersValidation = ((req, res, next) => {
-  return validate(answersSchema, req.body, next);
+export const answersValidation = ((req, _, next) => {
+  return validate<Ianswers>(answersSchema, req.body, next);
 }) as RequestHandler;

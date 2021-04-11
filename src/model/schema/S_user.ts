@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import { model, Schema } from 'mongoose';
-import { UserDocument, UserModel } from '../../types/interfaces';
+import { Iuser, TuserModel } from '../../types/interfaces';
 import { SALT_WORK_FACTOR } from '../../helpers/constants';
 
-const UserSchema = new Schema<UserDocument, UserModel>(
+const UserSchema = new Schema<Iuser, TuserModel>(
   {
     name: {
       type: String,
@@ -24,44 +24,42 @@ const UserSchema = new Schema<UserDocument, UserModel>(
       type: String,
       required: [true, 'Password required'],
     },
-    token: {
-      type: String,
-      default: null,
-    },
 
     results: {
-      type: Object,
-      default: {
-        qaResult: null,
-        testTheoryResult: null,
-      },
+      type: Object.keys({
+        qaResult: { type: String, default: null },
+        testTheoryResult: { type: String, default: null },
+      }),
     },
 
     refreshToken: {
       type: String,
       default: null,
-      // required: [true, 'Refresh token required'],
     },
   },
   { versionKey: false, timestamps: true },
 );
 
 // Document middlewares
-UserSchema.pre<UserDocument>('save', async function (next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
+
   // add password to schema
+  // ==================================================================
   const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
   this.password = await bcrypt.hash(this.password, salt, null);
   next();
 });
 
+//  method that verify password
+// ====================================================================
 UserSchema.methods.validPassword = async function (password: string) {
   const isValidPassword = await bcrypt.compare(password, this.password);
   return isValidPassword;
 };
 
-const User = model<UserDocument, UserModel>('user', UserSchema);
+const User = model('user', UserSchema);
 
 export default User;

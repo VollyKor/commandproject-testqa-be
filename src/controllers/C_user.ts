@@ -1,19 +1,25 @@
 import jwt from 'jsonwebtoken';
 import Users from '../model/M_user';
-import { HttpCode } from '../helpers/constants';
+import { HttpCode } from '../types/enums';
 import { RequestHandler } from 'express-serve-static-core';
+import * as Session from '../model/M_session';
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
+const JWT_REFRESHTOKEN_SECRET = process.env.JWT_REFRESHTOKEN_SECRET;
 
-interface Ireg {
+interface Iregistration {
   email: string;
   name?: string;
+  password: string;
+}
+interface Ilogin {
+  email: string;
   password: string;
 }
 
 const reg = (async (req, res, next) => {
   try {
-    const { email, name } = req.body as Ireg;
+    const { email, name } = req.body as Iregistration;
 
     const user = await Users.findByEmail(email);
 
@@ -37,14 +43,13 @@ const reg = (async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.log('error', e.body);
     next(e);
   }
 }) as RequestHandler;
 
 const login = (async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as Ilogin;
     const user = await Users.findByEmail(email);
 
     const isValidPassword = await user?.validPassword(password);
@@ -57,12 +62,13 @@ const login = (async (req, res, next) => {
         message: 'Invalid credentials',
       });
     }
+    const session = await Session.create(user._id);
 
-    const payload = { id: user._id };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-    const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
-
-    Users.updateToken(user._id, token);
+    const payload = { id: user._id, sessionId: session._id };
+    const token = jwt.sign(payload, JWT_TOKEN_SECRET, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, JWT_REFRESHTOKEN_SECRET, {
+      expiresIn: '7d',
+    });
 
     return res.status(HttpCode.OK).json({
       status: 'success',
@@ -78,20 +84,16 @@ const login = (async (req, res, next) => {
   }
 }) as RequestHandler;
 
-const logout = (async (req, res, next) => {
-  try {
-    // const id: string = req.user.id
-    const { id } = req.body.user;
-    Users.updateToken(id, null);
-    return res.status(HttpCode.NO_CONTENT).json();
-  } catch (error) {
-    next(error);
-  }
+const logout = (async (req, res) => {
+  const user = req.body.user;
+
+  const result = await Session.remove(req.body.sessionId);
+
+  res.status(HttpCode.NO_CONTENT).json({});
 }) as RequestHandler;
 
-const current = (async (req, res, next) => {
-  const token = req.get('Authorization').slice(7);
-  const { email, name } = await Users.findByToken(token);
+const current = (async (req, res) => {
+  const { name, email } = req.body.user;
   return res.status(200).json({
     email,
     name,

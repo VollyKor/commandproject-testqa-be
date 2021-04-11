@@ -1,4 +1,6 @@
-export function getuniqueQns<T>(array: T[]): T[] {
+// Function that return 12 unique questions from array
+// ================================================
+export default function getuniqueQns<T>(array: T[]): T[] {
   const newArray = [];
 
   (function getItem() {

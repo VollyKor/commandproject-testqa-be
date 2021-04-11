@@ -1,9 +1,9 @@
 import { model, Schema } from 'mongoose';
-import { testType } from '../../helpers/constants';
+import { testType } from '../../types/enums';
 
-import { qnDocument, qnModel } from '../../types/interfaces';
+import { Iquestion, TqnModel } from '../../types/interfaces';
 
-const QuestionSchema = new Schema<qnDocument, qnModel>(
+const QuestionSchema = new Schema<Iquestion, TqnModel>(
   {
     type: {
       type: String,
@@ -26,6 +26,6 @@ const QuestionSchema = new Schema<qnDocument, qnModel>(
   { versionKey: false, timestamps: true },
 );
 
-const Question = model<qnDocument, qnModel>('question', QuestionSchema);
+const Question = model('question', QuestionSchema);
 
 export default Question;
