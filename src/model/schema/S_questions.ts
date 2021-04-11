@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { testType } from '../../helpers/constants';
+import { testType } from '../../types/enums';
 
 import { Iquestion, TqnModel } from '../../types/interfaces';
 

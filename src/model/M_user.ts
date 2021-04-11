@@ -1,5 +1,5 @@
 import User from './schema/S_user';
-import { TfindUserByValue, TcreateUser } from '../types/interfaces';
+import { TfindUserByValue, TcreateUser } from '../types/types';
 
 const findByEmail: TfindUserByValue = async email => {
   const user = await User.findOne({ email });

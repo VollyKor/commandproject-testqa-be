@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { NextFunction, RequestHandler } from 'express-serve-static-core';
-import { HttpCode, statusCode } from '../../helpers/constants';
+import { HttpCode, statusCode } from '../../types/enums';
 import { InewUser, Ilogin } from '../../types/interfaces';
 
 const registerUserSchema: Joi.ObjectSchema<InewUser> = Joi.object().keys({

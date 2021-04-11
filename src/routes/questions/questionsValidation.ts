@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import { NextFunction, RequestHandler } from 'express-serve-static-core';
-import { HttpCode } from '../../helpers/constants';
-import { testType } from '../../helpers/constants';
+import { testType, HttpCode } from '../../types/enums';
 import { Ianswers } from '../../types/interfaces';
 
 const answersSchema: Joi.ObjectSchema<Ianswers> = Joi.object().keys({

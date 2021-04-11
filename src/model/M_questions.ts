@@ -1,5 +1,5 @@
 import Questions from './schema/S_questions';
-import { testType } from '../helpers/constants';
+import { testType } from '../types/enums';
 import { Iquestion } from '../types/interfaces';
 
 const getAll = async (): Promise<Iquestion[]> => {

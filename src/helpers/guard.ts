@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { RequestHandler } from 'express-serve-static-core';
-import { HttpCode } from './constants';
+import { HttpCode } from '../types/enums';
 import '../config/passport';
 
 const guard = ((req, res, next) => {

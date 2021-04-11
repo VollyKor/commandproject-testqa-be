@@ -1,5 +1,6 @@
+import { NextFunction, Request, Response } from 'express';
 import { Document, Model } from 'mongoose';
-import { testType } from '../helpers/constants';
+import { testType } from '../types/enums';
 
 //  User Interfaces
 // ===========================================
@@ -77,11 +78,6 @@ export interface IdbGoogleUser {
 // ===========================================
 // ===========================================
 
-//  User Types
-// =====================================================================
-export type TfindUserByValue = (value: string) => Promise<Iuser>;
-export type TcreateUser = (newuser: InewUser) => Promise<Iuser>;
-
 // Answer Validation
 // ==============================================
 export interface Ianswer {
@@ -92,4 +88,17 @@ export interface Ianswer {
 export interface Ianswers {
   type: string;
   answers: Ianswer[];
+}
+
+export type ControllerFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => any;
+
+//  Answers
+// ==============================================
+export interface IreqAnswer {
+  type: testType;
+  answers: string[];
 }

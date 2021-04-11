@@ -6,7 +6,8 @@ import swaggerUi from 'swagger-ui-express';
 
 import swaggerDocument from './swagger.json';
 import { ErrorRequestHandler } from 'express-serve-static-core';
-import { PUBLIC_FOLDER_PATH, HttpCode } from './helpers/constants';
+import { PUBLIC_FOLDER_PATH } from './helpers/constants';
+import { HttpCode } from './types/enums';
 
 import QuestionRouter from './routes/questions/R_questions';
 import UserRouter from './routes/users/users';
@@ -26,8 +27,8 @@ app.use('/test', QuestionRouter);
 app.use('/users', UserRouter);
 app.use('/auth', AuthRouter);
 
-app.get('/', (_, response) => {
-  response.send('Hello world!');
+app.get('/', (_, res) => {
+  res.send('Hello world!');
 });
 
 // Path for swagger
@@ -39,7 +40,8 @@ app.use((_, res) => {
   res.status(HttpCode.NOT_FOUND).json({ message: 'Not found app' });
 });
 
-app.use(((err, _, res) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use(((err, _, res, next) => {
   if (err.status === HttpCode.BAD_REQUEST) {
     return res.status(HttpCode.BAD_REQUEST).json(err);
   }

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import Users from '../model/M_user';
-import { HttpCode } from '../helpers/constants';
+import { HttpCode } from '../types/enums';
 import { RequestHandler } from 'express-serve-static-core';
 import * as Session from '../model/M_session';
 

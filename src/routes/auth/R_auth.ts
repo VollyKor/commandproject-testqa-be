@@ -1,4 +1,5 @@
 import Express from 'express';
+import TryCatch from '../../helpers/tryCatch';
 import {
   googleAuth,
   googleRedirect,
@@ -8,7 +9,7 @@ import {
 const router = Express.Router();
 
 router.get('/google', googleAuth);
-router.get('/google-redirect', googleRedirect);
-router.get('/refresh', refreshTokens);
+router.get('/google-redirect', TryCatch(googleRedirect));
+router.get('/refresh', TryCatch(refreshTokens));
 
 export default router;
