@@ -9,8 +9,12 @@ import { answersValidation } from './questionsValidation';
 
 const router = express.Router();
 
-router.get('/', tryCatch(guard), tryCatch(Questions.getByType));
-router.get('/answers', answersValidation, tryCatch(Questions.compareAnswers));
-router.get('/all', tryCatch(guard), tryCatch(Questions.getAll));
+router.get('/', guard, tryCatch(Questions.getByType));
+router.get(
+  '/answers',
+  [guard, answersValidation],
+  tryCatch(Questions.compareAnswers),
+);
+router.get('/all', guard, tryCatch(Questions.getAll));
 
 export default router;

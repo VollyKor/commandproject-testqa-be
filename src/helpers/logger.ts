@@ -1,5 +1,4 @@
 import log4js from 'log4js';
-// import * as Const from './constants';
 
 // using log4js as Logger
 // ========================================

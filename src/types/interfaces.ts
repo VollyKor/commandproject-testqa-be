@@ -102,3 +102,15 @@ export interface IreqAnswer {
   type: testType;
   answers: string[];
 }
+
+//  Tokens
+// ==============================================
+export interface IuserPayload extends ItokenPayload {
+  user: Iuser;
+}
+
+export interface ItokenPayload {
+  id: string;
+  sessionId: string;
+  googleAuth?: boolean;
+}

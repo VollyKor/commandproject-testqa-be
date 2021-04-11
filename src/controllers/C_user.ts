@@ -4,7 +4,8 @@ import { HttpCode } from '../types/enums';
 import { RequestHandler } from 'express-serve-static-core';
 import * as Session from '../model/M_session';
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
+const JWT_REFRESHTOKEN_SECRET = process.env.JWT_REFRESHTOKEN_SECRET;
 
 interface Iregistration {
   email: string;
@@ -42,7 +43,6 @@ const reg = (async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.log('error', e.body);
     next(e);
   }
 }) as RequestHandler;
@@ -65,8 +65,10 @@ const login = (async (req, res, next) => {
     const session = await Session.create(user._id);
 
     const payload = { id: user._id, sessionId: session._id };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-    const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
+    const token = jwt.sign(payload, JWT_TOKEN_SECRET, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, JWT_REFRESHTOKEN_SECRET, {
+      expiresIn: '7d',
+    });
 
     return res.status(HttpCode.OK).json({
       status: 'success',
@@ -82,15 +84,12 @@ const login = (async (req, res, next) => {
   }
 }) as RequestHandler;
 
-const logout = (async (req, res, next) => {
-  try {
-    const { id } = req.body.user;
-    Session.remove(id);
+const logout = (async (req, res) => {
+  const user = req.body.user;
 
-    return res.status(HttpCode.NO_CONTENT);
-  } catch (error) {
-    next(error);
-  }
+  const result = await Session.remove(req.body.sessionId);
+
+  res.status(HttpCode.NO_CONTENT).json({});
 }) as RequestHandler;
 
 const current = (async (req, res) => {

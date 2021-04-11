@@ -8,10 +8,14 @@ import { RequestHandler } from 'express-serve-static-core';
 import { reqGoogleUserEmail, reqGoogleUserData } from '../helpers/constants';
 import { HttpCode, statusCode } from '../types/enums';
 import { createOrUpdateGoogleUser } from '../model/M_google-user';
+import { ItokenPayload, IuserPayload } from '../types/interfaces';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3010';
 const FRONT_END_URL = process.env.FRONT_END_URL || 'http://localhost:3000';
-const SECRET_KEY = process.env.JWT_SECRET;
+
+const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
+const JWT_REFRESHTOKEN_SECRET = process.env.JWT_REFRESHTOKEN_SECRET;
+
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
@@ -65,8 +69,10 @@ export const googleRedirect = (async (req, res) => {
     googleAuth: true,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-  const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
+  const token = jwt.sign(payload, JWT_TOKEN_SECRET, { expiresIn: '1h' });
+  const refreshToken = jwt.sign(payload, JWT_REFRESHTOKEN_SECRET, {
+    expiresIn: '7d',
+  });
 
   const urlString = qS.stringifyUrl({
     url: FRONT_END_URL,
@@ -80,7 +86,9 @@ export const googleRedirect = (async (req, res) => {
   return res.redirect(urlString);
 }) as RequestHandler;
 
-export const refreshTokens = (async (req, res) => {
+export const refreshTokens = (async (req, res, next) => {
+  req.body as IuserPayload;
+
   const user = req.body.user;
 
   if (!user) {
@@ -91,19 +99,21 @@ export const refreshTokens = (async (req, res) => {
     });
   }
 
-  const payload = {
-    userid: user._id,
-    sessionId: user.sessionId,
+  const payload: ItokenPayload = {
+    id: user._id,
+    sessionId: req.body.sessionId,
+    googleAuth: req.body.googleAuth,
   };
-  console.log('payload in refreshToken rout', payload);
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-  const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
+  const token = jwt.sign(payload, JWT_TOKEN_SECRET, { expiresIn: '1h' });
+  const refreshToken = jwt.sign(payload, JWT_REFRESHTOKEN_SECRET, {
+    expiresIn: '7d',
+  });
 
   res.status(HttpCode.OK).json({
     status: statusCode.SUCCESS,
     code: HttpCode.OK,
     data: { token, refreshToken, email: user.email },
   });
-  return console.log('refreshTokens');
+  return next();
 }) as RequestHandler;

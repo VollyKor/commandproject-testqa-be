@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
+import './helpers/logger';
 
 import swaggerDocument from './swagger.json';
 import { ErrorRequestHandler } from 'express-serve-static-core';

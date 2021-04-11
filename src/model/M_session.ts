@@ -7,13 +7,15 @@ const create = async (userId: string): Promise<IsessionDocument> => {
   return newSession;
 };
 
-const remove = async (sessionId: string): Promise<boolean> => {
-  try {
-    await Session.remove({ _id: sessionId });
-    return true;
-  } catch (error) {
-    console.log(error);
-  }
+type T = {
+  ok?: number;
+  n?: number;
+} & {
+  deletedCount?: number;
 };
+
+type F = (sessionId: string) => Promise<T>;
+
+const remove: F = async Id => await Session.deleteOne({ _id: Id });
 
 export { create, remove };

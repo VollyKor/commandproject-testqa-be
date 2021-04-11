@@ -4,7 +4,7 @@ import { RequestHandler } from 'express-serve-static-core';
 import { HttpCode } from '../types/enums';
 import { IuserPayload } from '../types/interfaces';
 
-const guard = ((req, res, next) => {
+const guardRefresh = ((req, res, next) => {
   try {
     if (req.get('Authorization') === undefined) {
       return res.status(HttpCode.UNAUTHORIZED).json({
@@ -15,7 +15,7 @@ const guard = ((req, res, next) => {
     }
 
     passport.authenticate(
-      'jwt',
+      'jwt-refresh',
       { session: false },
       (err, payload: IuserPayload) => {
         if (!payload?.user || err) {
@@ -34,4 +34,4 @@ const guard = ((req, res, next) => {
     next(error);
   }
 }) as RequestHandler;
-export default guard;
+export default guardRefresh;

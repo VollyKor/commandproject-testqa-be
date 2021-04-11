@@ -8,7 +8,7 @@ const router = express.Router();
 router
   .post('/registration', registerUserValidation, tryCatch(userController.reg))
   .post('/login', loginUserValidation, tryCatch(userController.login))
-  .post('/logout', tryCatch(guard), tryCatch(userController.logout))
-  .get('/current', tryCatch(guard), tryCatch(userController.current));
+  .post('/logout', guard, tryCatch(userController.logout))
+  .get('/current', guard, tryCatch(userController.current));
 
 export default router;
