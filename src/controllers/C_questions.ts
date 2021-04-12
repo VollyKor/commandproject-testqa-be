@@ -14,12 +14,18 @@ const getAll = (async (_, res) => {
 const getByType = (async (req, res) => {
   const testquery = req.query.test;
 
+  const isValidTestQuery =
+    testquery === testType.QA ||
+    testquery === testType.COMMON ||
+    testquery === testType.TESTTHEORY;
+
+  if (!isValidTestQuery) return Res.BadRequest(res);
+
   if (testquery === testType.QA) {
     const questions = await Questions.getByTypeWithoutAnswers(testType.QA);
     const data = getuniqueQns(questions);
     return Res.Success(res, data);
   }
-
   if (testquery === testType.TESTTHEORY) {
     const questions = await Questions.getByTypeWithoutAnswers(
       testType.TESTTHEORY,
@@ -28,8 +34,8 @@ const getByType = (async (req, res) => {
     return Res.Success(res, data);
   }
 
-  const data = await Questions.getByTypeWithoutAnswers(testType.COMMON);
-  return Res.Success(res, data);
+  const questions = await Questions.getByTypeWithoutAnswers(testType.COMMON);
+  return Res.Success(res, questions);
 }) as RequestHandler;
 
 const compareAnswers = (async (req, res) => {
