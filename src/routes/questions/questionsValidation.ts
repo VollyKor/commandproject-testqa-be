@@ -4,9 +4,8 @@ import { testType, HttpCode } from '../../types/enums';
 import { Ianswers } from '../../types/interfaces';
 
 const answersSchema: Joi.ObjectSchema<Ianswers> = Joi.object().keys({
-  type: Joi.string()
-    .valid(testType.COMMON, testType.QA, testType.TESTTHEORY)
-    .required(),
+  type: Joi.string().valid(testType.COMMON, testType.QA, testType.TESTTHEORY),
+  // .required(),
   answers: Joi.array()
     .items(
       Joi.object().keys({
