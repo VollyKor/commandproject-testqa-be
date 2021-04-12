@@ -4,6 +4,7 @@ import { testType, HttpCode } from '../../types/enums';
 import { Ianswers } from '../../types/interfaces';
 
 const answersSchema: Joi.ObjectSchema<Ianswers> = Joi.object().keys({
+  user: Joi.object().optional(),
   type: Joi.string()
     .valid(testType.COMMON, testType.QA, testType.TESTTHEORY)
     .required(),
@@ -31,5 +32,7 @@ function validate<T>(schema: Joi.ObjectSchema, obj: T, next: NextFunction) {
 }
 
 export const answersValidation = ((req, _, next) => {
+  console.log(req.body);
+
   return validate<Ianswers>(answersSchema, req.body, next);
 }) as RequestHandler;

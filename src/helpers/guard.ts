@@ -26,7 +26,7 @@ const guard = ((req, res, next) => {
           });
         }
 
-        req.body = { ...payload };
+        req.body.user = { ...payload };
         return next();
       },
     )(req, res, next);

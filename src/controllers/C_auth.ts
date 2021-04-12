@@ -110,10 +110,9 @@ export const refreshTokens = (async (req, res, next) => {
     expiresIn: '7d',
   });
 
-  res.status(HttpCode.OK).json({
+  return res.status(HttpCode.OK).json({
     status: statusCode.SUCCESS,
     code: HttpCode.OK,
     data: { token, refreshToken, email: user.email },
   });
-  return next();
 }) as RequestHandler;
