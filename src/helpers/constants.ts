@@ -17,4 +17,4 @@ export const PORT = '3010';
 export const LOG_LEVEL = 'INFO';
 
 export const PUBLIC_FOLDER_PATH = (): string =>
-  path.join(process.cwd(), 'public');
+  path.join(process.cwd(), 'src', 'public');
