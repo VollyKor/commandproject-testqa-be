@@ -45,8 +45,8 @@ app.use((_, res) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(((err, _, res, next) => {
   const { status, message } = err;
-
   if (status === statusCode.ERROR) return Res.BadRequest(res, message);
+  if (status === HttpCode.BAD_REQUEST) return Res.BadRequest(res, message);
 
   Res.InternalError(res, message);
 }) as ErrorRequestHandler);

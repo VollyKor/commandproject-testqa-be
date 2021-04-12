@@ -1,7 +1,7 @@
 import express from 'express';
 import guard from '../../helpers/guard';
 import userController from '../../controllers/C_user';
-import { registerUserValidation, loginUserValidation } from './UserValidation';
+import { registerUserValidation, loginUserValidation } from './userValidation';
 import tryCatch from '../../helpers/tryCatch';
 const router = express.Router();
 
