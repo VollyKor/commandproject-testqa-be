@@ -1,47 +1,24 @@
 import jwt from 'jsonwebtoken';
-import Users from '../model/M_user';
-import { HttpCode } from '../types/enums';
 import { RequestHandler } from 'express-serve-static-core';
+import Res from '../helpers/Response';
+import Users from '../model/M_user';
 import * as Session from '../model/M_session';
+import { HttpCode } from '../types/enums';
+import { Ilogin, Iregistration } from '../types/interfaces';
 
 const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
 const JWT_REFRESHTOKEN_SECRET = process.env.JWT_REFRESHTOKEN_SECRET;
 
-interface Iregistration {
-  email: string;
-  name?: string;
-  password: string;
-}
-interface Ilogin {
-  email: string;
-  password: string;
-}
-
 const reg = (async (req, res, next) => {
   try {
     const { email, name } = req.body as Iregistration;
-
     const user = await Users.findByEmail(email);
 
-    if (user) {
-      return res.status(HttpCode.CONFLICT).json({
-        status: 'error',
-        code: HttpCode.CONFLICT,
-        data: 'Conflict',
-        message: 'Email is already use',
-      });
-    }
+    if (user) return Res.Conflict(res, 'Email is already use');
 
-    const { id } = await Users.create({ ...req.body });
-    return res.status(HttpCode.CREATED).json({
-      status: 'success',
-      code: HttpCode.CREATED,
-      data: {
-        id,
-        email,
-        name,
-      },
-    });
+    await Users.create({ ...req.body });
+
+    return Res.Created(res, { email, name });
   } catch (e) {
     next(e);
   }
@@ -52,16 +29,10 @@ const login = (async (req, res, next) => {
     const { email, password } = req.body as Ilogin;
     const user = await Users.findByEmail(email);
 
-    const isValidPassword = await user?.validPassword(password);
+    const isValidPassword = user?.validPassword(password);
 
-    if (!user || !isValidPassword) {
-      return res.status(HttpCode.UNAUTHORIZED).json({
-        status: 'error',
-        code: HttpCode.UNAUTHORIZED,
-        data: 'UNAUTHORIZED',
-        message: 'Invalid credentials',
-      });
-    }
+    if (!user || !isValidPassword) return Res.Unauthorized(res);
+
     const session = await Session.create(user._id);
 
     const payload = { id: user._id, sessionId: session._id };
@@ -70,14 +41,10 @@ const login = (async (req, res, next) => {
       expiresIn: '7d',
     });
 
-    return res.status(HttpCode.OK).json({
-      status: 'success',
-      code: HttpCode.OK,
-      data: {
-        token,
-        refreshToken,
-        email,
-      },
+    return Res.Success(res, {
+      token,
+      refreshToken,
+      email,
     });
   } catch (e) {
     next(e);
@@ -85,18 +52,17 @@ const login = (async (req, res, next) => {
 }) as RequestHandler;
 
 const logout = (async (req, res) => {
-  const user = req.body.user;
+  await Session.remove(req.body.sessionId);
 
-  const result = await Session.remove(req.body.sessionId);
-
-  res.status(HttpCode.NO_CONTENT).json({});
+  return res.sendStatus(HttpCode.NO_CONTENT);
 }) as RequestHandler;
 
 const current = (async (req, res) => {
-  const { name, email } = req.body.user;
-  return res.status(200).json({
-    email,
-    name,
+  const user = req.body.user.user;
+
+  return Res.Success(res, {
+    email: user.email,
+    name: user.name,
   });
 }) as RequestHandler;
 

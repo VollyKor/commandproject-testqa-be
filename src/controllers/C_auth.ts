@@ -1,12 +1,11 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-
+import Res from '../helpers/Response';
 import * as qS from 'query-string';
 import * as Session from '../model/M_session';
 
 import { RequestHandler } from 'express-serve-static-core';
 import { reqGoogleUserEmail, reqGoogleUserData } from '../helpers/constants';
-import { HttpCode, statusCode } from '../types/enums';
 import { createOrUpdateGoogleUser } from '../model/M_google-user';
 import { ItokenPayload, IuserPayload } from '../types/interfaces';
 
@@ -86,17 +85,13 @@ export const googleRedirect = (async (req, res) => {
   return res.redirect(urlString);
 }) as RequestHandler;
 
-export const refreshTokens = (async (req, res, next) => {
+export const refreshTokens = (async (req, res) => {
   req.body as IuserPayload;
 
   const user = req.body.user;
 
   if (!user) {
-    return res.status(HttpCode.BAD_REQUEST).json({
-      status: statusCode.ERROR,
-      code: HttpCode.BAD_REQUEST,
-      message: 'Bad request',
-    });
+    return Res.BadRequest(res);
   }
 
   const payload: ItokenPayload = {
@@ -110,9 +105,5 @@ export const refreshTokens = (async (req, res, next) => {
     expiresIn: '7d',
   });
 
-  return res.status(HttpCode.OK).json({
-    status: statusCode.SUCCESS,
-    code: HttpCode.OK,
-    data: { token, refreshToken, email: user.email },
-  });
+  return Res.Success(res, { token, refreshToken, email: user.email });
 }) as RequestHandler;

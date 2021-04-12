@@ -18,10 +18,11 @@ const validate = <T>(schema: Joi.ObjectSchema, obj: T, next: NextFunction) => {
   const { error } = schema.validate(obj);
   if (error) {
     const [{ message }] = error.details;
+    const formMessage = message.replace(/"([^"]+(?="))"/g, '$1');
     return next({
       status: statusCode.ERROR,
       code: HttpCode.BAD_REQUEST,
-      message: `${message.replace(/"/g, '')}`,
+      message: formMessage,
     });
   }
   next();

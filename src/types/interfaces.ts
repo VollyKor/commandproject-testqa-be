@@ -114,3 +114,13 @@ export interface ItokenPayload {
   sessionId: string;
   googleAuth?: boolean;
 }
+
+export interface Iregistration {
+  email: string;
+  name?: string;
+  password: string;
+}
+export interface Ilogin {
+  email: string;
+  password: string;
+}

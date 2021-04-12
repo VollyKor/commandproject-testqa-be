@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -8,11 +8,12 @@ import './helpers/logger';
 import swaggerDocument from './swagger.json';
 import { ErrorRequestHandler } from 'express-serve-static-core';
 import { PUBLIC_FOLDER_PATH } from './helpers/constants';
-import { HttpCode } from './types/enums';
+import { HttpCode, statusCode } from './types/enums';
 
 import QuestionRouter from './routes/questions/R_questions';
 import UserRouter from './routes/users/users';
 import AuthRouter from './routes/auth/R_auth';
+import Res from './helpers/Response';
 
 dotenv.config();
 
@@ -43,10 +44,11 @@ app.use((_, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(((err, _, res, next) => {
-  if (err.status === HttpCode.BAD_REQUEST) {
-    return res.status(HttpCode.BAD_REQUEST).json(err);
-  }
-  res.status(HttpCode.INTERNAL_SERVER_ERROR).json({ message: err.message });
+  const { status, message } = err;
+
+  if (status === statusCode.ERROR) return Res.BadRequest(res, message);
+
+  Res.InternalError(res, message);
 }) as ErrorRequestHandler);
 
 export default app;

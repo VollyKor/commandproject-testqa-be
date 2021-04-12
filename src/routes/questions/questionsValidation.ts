@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { NextFunction, RequestHandler } from 'express-serve-static-core';
-import { testType, HttpCode } from '../../types/enums';
+import { testType, HttpCode, statusCode } from '../../types/enums';
 import { Ianswers } from '../../types/interfaces';
 
 const answersSchema: Joi.ObjectSchema<Ianswers> = Joi.object().keys({
@@ -23,7 +23,7 @@ function validate<T>(schema: Joi.ObjectSchema, obj: T, next: NextFunction) {
   if (error) {
     const [{ message }] = error.details;
     return next({
-      status: 'error',
+      status: statusCode.ERROR,
       code: HttpCode.BAD_REQUEST,
       message: `${message.replace(/"/g, '')}`,
     });
