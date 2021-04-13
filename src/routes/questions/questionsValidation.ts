@@ -12,7 +12,7 @@ const answersSchema: Joi.ObjectSchema<Ianswers> = Joi.object().keys({
     .items(
       Joi.object().keys({
         _id: Joi.string(),
-        answer: Joi.string(),
+        answer: Joi.string().empty(''),
       }),
     )
     .required(),
