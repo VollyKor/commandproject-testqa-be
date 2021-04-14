@@ -14,7 +14,11 @@ const reg = (async (req, res, next) => {
     const { email, name } = req.body as Iregistration;
     const user = await Users.findByEmail(email);
 
-    if (user) return Res.Conflict(res, 'Email is already use');
+    if (user) {
+      return Res.Success(res, 'Email is already use');
+    }
+
+    // if (user) return Res.Conflict(res, 'Email is already use');
 
     await Users.create({ ...req.body });
 
@@ -28,8 +32,10 @@ const login = (async (req, res, next) => {
   try {
     const { email, password } = req.body as Ilogin;
     const user = await Users.findByEmail(email);
+    console.log(user);
 
-    const isValidPassword = user?.validPassword(password);
+    const isValidPassword = await user?.validPassword(password);
+    console.log(isValidPassword);
 
     if (!user || !isValidPassword) return Res.Unauthorized(res);
 
