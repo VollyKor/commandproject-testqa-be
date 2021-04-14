@@ -22,8 +22,8 @@
       "description": "Test endpoints"
     },
     {
-      "name": "Google",
-      "description": "Google endpoints"
+      "name": "Auth",
+      "description": "Auth endpoints"
     }
  ],
 
@@ -157,7 +157,7 @@
             "name": "Authorization",
             "required": true,
             "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
+            "description": "USER < TOKEN > IS REQUIRED"
         }],
 
         "security": [{ "Bearer": [] }],
@@ -219,7 +219,7 @@
             "name": "Authorization",
             "required": true,
             "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
+            "description": "USER < TOKEN > IS REQUIRED"
         }],
 
         "security": [{ "Bearer": [] }],
@@ -285,7 +285,7 @@
             "name": "Authorization",
             "required": true,
             "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
+            "description": "USER < TOKEN > IS REQUIRED"
             },
             {
             "in": "query",
@@ -351,7 +351,7 @@
             "name": "Authorization",
             "required": true,
             "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
+            "description": "USER < TOKEN > IS REQUIRED"
             }],
         "requestBody": {
           "description": "Object of answers",
@@ -413,9 +413,65 @@
     },
     "/auth/google-redirect": {
       "get": {
-        "tags": ["Google"],
+        "tags": ["Auth"],
         "summary": "LOGIN USING GOOGLE",
         "parameters": [],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/login/LoginResponseSuccessful"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/login/LoginUnauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }  
+        }
+      }
+    },
+    "/auth/refresh": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "REFRESH TOKEN",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER'S < REFRESH-TOKEN > IS REQUIRED"
+        }],
         "requestBody": {},
         "responses": {
           "200": {
@@ -588,6 +644,11 @@
                                 "type": "string",
                                 "description": "User's token",
                                 "example": "asdf2a3sd3sd1asd3.ewiZXhwIjo3NzU5OTc3fQ.jwVWnTU2MCcZkLzS_-i2zRs"
+                            },
+                            "refreshToken": {
+                                "type": "string",
+                                "description": "User's token",
+                                "example": "ewiZXhwIjo3NzU5OTc3fQ.asdf2a3sd3sd1asd3.jwVWnTU2MCcZkLzS_-i2zRs"
                             },
                             "email": {
                                 "type": "string",
