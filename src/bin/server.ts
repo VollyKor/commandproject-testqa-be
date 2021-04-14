@@ -1,8 +1,15 @@
 import app from '../index';
 import db from '../db/db';
+<<<<<<< HEAD
 
 import dotenv from 'dotenv';
 dotenv.config();
+=======
+import dotenv from 'dotenv';
+dotenv.config();
+
+const PORT = process.env.PORT || 3010;
+>>>>>>> master
 
 const PORT = process.env.PORT || 3010;
 
