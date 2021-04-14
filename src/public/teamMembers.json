@@ -1,0 +1,66 @@
+[
+  {
+    "id": "id-1",
+    "name": "Zaika Maxim",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617799291/Maxim_Zaika_o3qboe.jpg",
+    "position": "Front-End Engenier, Team-Lead",
+    "sociallinks": "https://github.com/Luno-front-end"
+  },
+
+  {
+    "id": "id-2",
+    "name": "Glushchenko Nadya",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617799291/Glushchenko_Nadya_ilcuwv.jpg",
+    "position": "Front-End Engenier, Scrum-Master",
+    "sociallinks": "https://github.com/NadyaGlushchenko"
+  },
+  {
+    "id": "id-3",
+    "name": "Kornieiev Volodymyr",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1618219866/Volodymyr_Kornieiev_nga4yw.jpg",
+    "position": "Front-End Engenier",
+    "sociallinks": "https://github.com/VollyKor"
+  },
+  {
+    "id": "id-4",
+    "name": "Zvieriev Vitality",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617799294/Vitaliy_Zvieriev_colz9i.jpg",
+    "position": "Front-End Engenier",
+    "sociallinks": "https://github.com/Vitaliy-Z"
+  },
+  {
+    "id": "id-5",
+    "name": "Kovalyshyn Olexandr",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617799291/Olexandr_Kovalyshyn_xlmhf7.jpg",
+    "position": "Front-End Engenier",
+    "sociallinks": "https://github.com/olkovalyshyn"
+  },
+  {
+    "id": "id-6",
+    "name": "Turbal Maxim",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617799291/Maxim_Turbal_gbou8a.png",
+    "position": "Front-End Engenier",
+    "sociallinks": "https://github.com/TOR968"
+  },
+  {
+    "id": "id-7",
+    "name": "Oksova Mariia",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617799291/Mariia_Oksova_gdusfj.jpg",
+    "position": "Front-End Engenier",
+    "sociallinks": "https://github.com/Oksova"
+  },
+  {
+    "id": "id-8",
+    "name": "Kovalets Aleksey",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617917381/Aleksey_Kovalets_qppksw.jpg",
+    "position": "Front-End Engenier",
+    "sociallinks": "https://github.com/aleks-goit"
+  },
+  {
+    "id": "id-9",
+    "name": "Pershyn Rostislav",
+    "url": "https://res.cloudinary.com/x-girl/image/upload/v1617799291/Rostislav_Pershyn_ycczvo.jpg",
+    "position": "Front-End Engenier",
+    "sociallinks": "https://github.com/rostislav228"
+  }
+]
