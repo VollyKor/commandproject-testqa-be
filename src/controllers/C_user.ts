@@ -28,10 +28,8 @@ const login = (async (req, res, next) => {
   try {
     const { email, password } = req.body as Ilogin;
     const user = await Users.findByEmail(email);
-    console.log(user);
 
     const isValidPassword = await user?.validPassword(password);
-    console.log(isValidPassword);
 
     if (!user || !isValidPassword) return Res.Unauthorized(res);
 
