@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "0.1.1",
+    "version": "0.2.2",
     "title": "PRO TEST SERVER",
     "description": "Shows how to use PRO TEST SERVER",
     "license": {
