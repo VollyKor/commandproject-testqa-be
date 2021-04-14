@@ -20,6 +20,10 @@
     {
       "name": "Test",
       "description": "Test endpoints"
+    },
+    {
+      "name": "Google",
+      "description": "Google endpoints"
     }
  ],
 
@@ -207,7 +211,7 @@
       }
     },
     "/users/current": {
-      "post": {
+      "get": {
         "tags": ["Users"],
         "summary": "USER CURRENT",
         "parameters": [{
