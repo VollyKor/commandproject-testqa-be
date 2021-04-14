@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "0.2.2",
+    "version": "0.2.3",
     "title": "PRO TEST SERVER",
     "description": "Shows how to use PRO TEST SERVER",
     "license": {
@@ -130,7 +130,7 @@
             "content": {
                 "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/user/login/LoginUnauthorized"
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
                 }
               }
             }
@@ -443,7 +443,7 @@
             "content": {
                 "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/user/login/LoginUnauthorized"
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
                 }
               }
             }
@@ -499,7 +499,7 @@
             "content": {
                 "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/user/login/LoginUnauthorized"
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
                 }
               }
             }
@@ -592,12 +592,7 @@
                     "type": "interge",
                     "description": "Response code",
                     "example": "409"
-                    },
-                    "data": {
-                    "type": "string",
-                    "description": "Response data",
-                    "example": "Conflict"
-                    },
+                    },                    
                     "message": {
                     "type": "string",
                     "description": "Response message",
@@ -659,32 +654,7 @@
                         }
                     }
                 }    
-            },
-            "LoginUnauthorized": {
-                "type": "object",
-                "properties": {
-                    "status": {
-                    "type": "string",
-                    "description": "Response status",
-                    "example": "error"
-                    },
-                    "code": {
-                    "type": "interge",
-                    "description": "Response code",
-                    "example": "401"
-                    },
-                    "data": {
-                    "type": "string",
-                    "description": "Response data",
-                    "example": "UNAUTHORIZED"
-                    },
-                    "message": {
-                    "type": "string",
-                    "description": "Response message",
-                    "example": "Invalid credentials"
-                    }  
-                }
-            }
+            }           
           },
         "logout": {
             "LogoutRequest": {
@@ -894,7 +864,7 @@
                         "message": {
                             "type": "string",
                             "description": "Error fata",
-                            "example": "User is unauthorized"
+                            "example": "Unauthorized"
                         }
                     }
         },      
@@ -917,7 +887,7 @@
                         "example": "Access is denied"
                     }
                 }    
-        },
+        },        
       "ErrorInternalServer": {
             "type": "object",
             "properties": {
