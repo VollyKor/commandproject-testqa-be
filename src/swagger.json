@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "0.1.1",
+    "version": "0.2.2",
     "title": "PRO TEST SERVER",
     "description": "Shows how to use PRO TEST SERVER",
     "license": {
@@ -11,7 +11,7 @@
   },    
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://team-project-be.herokuapp.com/" }, { "url": "http://localhost:3010/" }],
+  "servers": [{ "url": "https://team-project-be.herokuapp.com/" }],
   "tags": [
     {
       "name": "Users",
@@ -20,6 +20,10 @@
     {
       "name": "Test",
       "description": "Test endpoints"
+    },
+    {
+      "name": "Auth",
+      "description": "Auth endpoints"
     }
  ],
 
@@ -153,7 +157,7 @@
             "name": "Authorization",
             "required": true,
             "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
+            "description": "USER < TOKEN > IS REQUIRED"
         }],
 
         "security": [{ "Bearer": [] }],
@@ -162,6 +166,72 @@
           "204": {
             "description": "Successful operation",
             "content": {}
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User is not unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }        
+            }
+          },          
+          "403": {
+            "description": "Request forbidden",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForbidden"
+                }
+              }        
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "USER CURRENT",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER < TOKEN > IS REQUIRED"
+        }],
+
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": { "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/current/CurrentResponseSuccessful"
+                }
+              }}
           },
           "400": {
             "description": "Request error",
@@ -215,7 +285,7 @@
             "name": "Authorization",
             "required": true,
             "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
+            "description": "USER < TOKEN > IS REQUIRED"
             },
             {
             "in": "query",
@@ -281,7 +351,7 @@
             "name": "Authorization",
             "required": true,
             "type": "string",
-            "description": "USER TOKEN IS REQUIRED"
+            "description": "USER < TOKEN > IS REQUIRED"
             }],
         "requestBody": {
           "description": "Object of answers",
@@ -338,6 +408,112 @@
               }
             }
           }
+        }
+      }
+    },
+    "/auth/google-redirect": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "LOGIN USING GOOGLE",
+        "parameters": [],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/login/LoginResponseSuccessful"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/login/LoginUnauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }  
+        }
+      }
+    },
+    "/auth/refresh": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "REFRESH TOKEN",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER'S < REFRESH-TOKEN > IS REQUIRED"
+        }],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/login/LoginResponseSuccessful"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/login/LoginUnauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }  
         }
       }
     }
@@ -469,6 +645,11 @@
                                 "description": "User's token",
                                 "example": "asdf2a3sd3sd1asd3.ewiZXhwIjo3NzU5OTc3fQ.jwVWnTU2MCcZkLzS_-i2zRs"
                             },
+                            "refreshToken": {
+                                "type": "string",
+                                "description": "User's token",
+                                "example": "ewiZXhwIjo3NzU5OTc3fQ.asdf2a3sd3sd1asd3.jwVWnTU2MCcZkLzS_-i2zRs"
+                            },
                             "email": {
                                 "type": "string",
                                 "description": "User's email",
@@ -523,7 +704,40 @@
                     }          
                 }
             }            
-          }
+          },
+        "current": {
+           "CurrentResponseSuccessful": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Response status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "interge",
+                        "description": "Response code",
+                        "example": "200"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {                            
+                            "email": {
+                                "type": "string",
+                                "description": "User's email",
+                                "format": "email",
+                                "example": "user@example.com"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "User's name",
+                              "example": "User"
+                            }
+                        }
+                    }
+                }    
+            }
+        }
         },        
       "test": {
         "TestResponseSuccessful": {
@@ -707,7 +921,17 @@
       "ErrorInternalServer": {
             "type": "object",
             "properties": {
-                "message": {
+              "status": {
+                "type": "string",
+                "description": "Response status",
+                "example": "error"
+                },
+              "code": {
+                "type": "interge",
+                "description": "Response code",
+                "example": "500"
+                },    
+              "message": {
                 "type": "string",
                 "description": "Error message",
                 "example": "error message"
