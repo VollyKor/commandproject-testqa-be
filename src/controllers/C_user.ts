@@ -14,11 +14,7 @@ const reg = (async (req, res, next) => {
     const { email, name } = req.body as Iregistration;
     const user = await Users.findByEmail(email);
 
-    if (user) {
-      return Res.Success(res, 'Email is already use');
-    }
-
-    // if (user) return Res.Conflict(res, 'Email is already use');
+     if (user) return Res.Conflict(res, 'Email is already use');
 
     await Users.create({ ...req.body });
 
