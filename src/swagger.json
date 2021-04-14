@@ -11,7 +11,7 @@
   },    
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://team-project-be.herokuapp.com/" }, { "url": "http://localhost:3010/" }],
+  "servers": [{ "url": "https://team-project-be.herokuapp.com/" }],
   "tags": [
     {
       "name": "Users",
@@ -162,6 +162,72 @@
           "204": {
             "description": "Successful operation",
             "content": {}
+          },
+          "400": {
+            "description": "Request error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBadRequest"
+                }
+              }        
+            }
+          },
+          "401": {
+            "description": "User is not unauthorized",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorUnauthorized"
+                }
+              }        
+            }
+          },          
+          "403": {
+            "description": "Request forbidden",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorForbidden"
+                }
+              }        
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorInternalServer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "USER CURRENT",
+        "parameters": [{
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string",
+            "description": "USER TOKEN IS REQUIRED"
+        }],
+
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": { "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user/current/CurrentResponseSuccessful"
+                }
+              }}
           },
           "400": {
             "description": "Request error",
@@ -523,7 +589,40 @@
                     }          
                 }
             }            
-          }
+          },
+        "current": {
+           "CurrentResponseSuccessful": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "Response status",
+                        "example": "success"
+                    },
+                    "code": {
+                        "type": "interge",
+                        "description": "Response code",
+                        "example": "200"
+                    },
+                    "data": {
+                        "type": "object",
+                        "properties": {                            
+                            "email": {
+                                "type": "string",
+                                "description": "User's email",
+                                "format": "email",
+                                "example": "user@example.com"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "User's name",
+                              "example": "User"
+                            }
+                        }
+                    }
+                }    
+            }
+        }
         },        
       "test": {
         "TestResponseSuccessful": {
@@ -707,7 +806,17 @@
       "ErrorInternalServer": {
             "type": "object",
             "properties": {
-                "message": {
+              "status": {
+                "type": "string",
+                "description": "Response status",
+                "example": "error"
+                },
+              "code": {
+                "type": "interge",
+                "description": "Response code",
+                "example": "500"
+                },    
+              "message": {
                 "type": "string",
                 "description": "Error message",
                 "example": "error message"
