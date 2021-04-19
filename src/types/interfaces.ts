@@ -1,57 +1,72 @@
+import { NextFunction, Request, Response } from 'express';
 import { Document, Model } from 'mongoose';
-import { testType } from '../helpers/constants';
+import { testType } from '../types/enums';
 
-export interface IUser {
-  // check types
+//  User Interfaces
+// ===========================================
+export type TuserModel = Model<Iuser>;
+
+export interface Ilogin {
+  email: string;
+  password: string;
+}
+
+export interface InewUser extends Ilogin {
   name: string;
-  // _id: string,
+}
+
+export interface IdbUser {
+  name: string;
   email: string;
   results?: {
     qaResult: number | null;
     testTheoryResult: number | null;
   };
   refreshToken?: string;
-  sessionId?: string;
-
-  // check types
-  token: string | null;
 }
 
-export interface InewUser {
-  name: string;
-  email: string;
+export interface Iuser extends IdbUser, Document {
   password: string;
-}
-
-// Export this for strong typing
-export interface UserDocument extends IUser, Document {
-  password: string;
-  _id: string;
   validPassword(password: string): boolean;
 }
+// ===========================================
+// ===========================================
 
-// For model
-export type UserModel = Model<UserDocument>;
+//  Session Interfaces
+// ===========================================
+export type TsessionModel = Model<IsessionDocument>;
 
-export interface Question {
+export interface IsessionDocument extends Isession, Document {}
+
+export interface Isession {
+  userId: string;
+}
+// ==============================================
+// ==============================================
+
+//  Question Interfaces
+// ===========================================
+export type TqnModel = Model<Iquestion>;
+
+export interface Iquestion extends InewQuestion, Document {}
+
+export interface InewQuestion {
   type: testType;
   answers: string[];
   question: string[];
   rightAnswer: string;
 }
 
-export interface qnDocument extends Question, Document {}
+// ===========================================
+// ===========================================
 
-export type qnModel = Model<qnDocument>;
+//  GoogleUser Interfaces
+// ===========================================
+export type TgoogleUserModel = Model<IgoogleUser>;
 
-export interface IFindUserByValue<Value> {
-  (value: Value): Promise<UserDocument>;
-}
+export interface IgoogleUser extends IdbGoogleUser, Document {}
 
-// export type TupdateToken = (id: string , token:string) => Promise<IUser>
-export type TupdateToken = (id: string, token: string) => void;
-
-export interface IgoogleUser {
+export interface IdbGoogleUser {
   googleUserId: string;
   email: string;
   verified_email?: boolean;
@@ -59,5 +74,53 @@ export interface IgoogleUser {
   family_name?: string;
   picture?: string;
   locate?: string;
-  user_data?: IUser;
+}
+// ===========================================
+// ===========================================
+
+// Answer Validation
+// ==============================================
+export interface Ianswer {
+  _id: string;
+  answer: string;
+}
+
+export interface Ianswers {
+  type: string;
+  answers: Ianswer[];
+}
+
+export type ControllerFunction = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => any;
+
+//  Answers
+// ==============================================
+export interface IreqAnswer {
+  type: testType;
+  answers: string[];
+}
+
+//  Tokens
+// ==============================================
+export interface IuserPayload extends ItokenPayload {
+  user: Iuser;
+}
+
+export interface ItokenPayload {
+  id: string;
+  sessionId: string;
+  googleAuth?: boolean;
+}
+
+export interface Iregistration {
+  email: string;
+  name?: string;
+  password: string;
+}
+export interface Ilogin {
+  email: string;
+  password: string;
 }

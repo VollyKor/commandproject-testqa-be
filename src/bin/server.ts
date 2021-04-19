@@ -1,11 +1,12 @@
 import app from '../index';
 import db from '../db/db';
+
 import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 3010;
 
-// Connect to Database
+// Connect to MongoDB
 // ======================================
 db.then(() => {
   app.listen(PORT, () => {

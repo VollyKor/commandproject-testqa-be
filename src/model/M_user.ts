@@ -1,38 +1,27 @@
-import User from './schema/S_user'
-import {IFindUserByValue , TupdateToken, InewUser } from '../types/interfaces'
+import User from './schema/S_user';
+import { TfindUserByValue, TcreateUser } from '../types/types';
 
-const findByEmail: IFindUserByValue<string> = async email => {
-    const findedUser = await User.findOne({ email })
-    return findedUser
-}
+const findByEmail: TfindUserByValue = async email => {
+  const user = await User.findOne({ email });
+  return user;
+};
 
-const findById: IFindUserByValue<string> = async id => {
-        const findedUser = await User.findOne({ _id: id })
-     return findedUser
-}
-const findByToken: IFindUserByValue<string> = async token => {
-    const findedUser = await User.findOne({ token })
-    return findedUser
-}
+const findById: TfindUserByValue = async _id => {
+  const findedUser = await User.findById(_id);
+  return findedUser;
+};
 
-const create = async ({ name, email, password } : InewUser) => {
-    const user = new User({ name, email, password })
-    const savedUser = await user.save()
-    return savedUser
-}
-
-const updateToken: TupdateToken = async (id, token) => {
-    const uppdatedUser = await User.updateOne({ _id: id }, { token })
-    return uppdatedUser
-}
+const create: TcreateUser = async ({ name, email, password }) => {
+  const user = new User({ name, email, password });
+  const savedUser = await user.save();
+  return savedUser;
+};
 
 export default {
-    findByEmail,
-    findById,
-    findByToken,
-    create,
-    updateToken,
-}
+  findByEmail,
+  findById,
+  create,
+};
 
 // const verify = async (req, res, next) => {
 //     const id = req.user.id

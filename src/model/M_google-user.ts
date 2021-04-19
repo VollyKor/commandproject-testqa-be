@@ -1,7 +1,9 @@
 import { IgoogleUser } from '../types/interfaces';
 import GoogleUser from './schema/S_googleUser';
 
-export const createOrUpdateGoogleUser = async (data: IgoogleUser) => {
+export const createOrUpdateGoogleUser = async (
+  data: IgoogleUser,
+): Promise<IgoogleUser> => {
   const [user] = await GoogleUser.find({ email: data.email });
 
   if (!user) {
@@ -22,8 +24,8 @@ export const createOrUpdateGoogleUser = async (data: IgoogleUser) => {
   return updatedUser;
 };
 
-export const find = id => {
-  const user = GoogleUser.findById(id);
+export const find = async (id: string): Promise<IgoogleUser> => {
+  const user = await GoogleUser.findById(id);
   return user;
 };
 

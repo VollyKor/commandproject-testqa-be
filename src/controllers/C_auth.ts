@@ -1,32 +1,35 @@
-import { RequestHandler } from 'express-serve-static-core';
-import * as qS from 'query-string';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import Res from '../helpers/Response';
+import * as qS from 'query-string';
+import * as Session from '../model/M_session';
+
+import { RequestHandler } from 'express-serve-static-core';
 import { reqGoogleUserEmail, reqGoogleUserData } from '../helpers/constants';
 import { createOrUpdateGoogleUser } from '../model/M_google-user';
-import jwt from 'jsonwebtoken';
+import { ItokenPayload, IuserPayload } from '../types/interfaces';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3010';
 const FRONT_END_URL = process.env.FRONT_END_URL || 'http://localhost:3000';
-const SECRET_KEY = process.env.JWT_SECRET;
+
+const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
+const JWT_REFRESHTOKEN_SECRET = process.env.JWT_REFRESHTOKEN_SECRET;
+
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
-export const googleAuth = (async (req, res) => {
-  try {
-    const stringifiedParams = qS.stringify({
-      client_id: GOOGLE_CLIENT_ID,
-      redirect_uri: `${BASE_URL}/auth/google-redirect`,
-      scope: [reqGoogleUserEmail, reqGoogleUserData].join(' '),
-      response_type: 'code',
-      access_type: 'offline',
-      prompt: 'consent',
-    });
-    return res.redirect(
-      `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`,
-    );
-  } catch (error) {
-    console.log(error);
-  }
+export const googleAuth = (async (_, res) => {
+  const stringifiedParams = qS.stringify({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: `${BASE_URL}/auth/google-redirect`,
+    scope: [reqGoogleUserEmail, reqGoogleUserData].join(' '),
+    response_type: 'code',
+    access_type: 'offline',
+    prompt: 'consent',
+  });
+  return res.redirect(
+    `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`,
+  );
 }) as RequestHandler;
 
 export const googleRedirect = (async (req, res) => {
@@ -35,6 +38,7 @@ export const googleRedirect = (async (req, res) => {
 
   const urlParams = qS.parse(urlObj.search);
   const code = urlParams.code;
+
   const tokenData = await axios({
     url: `https://oauth2.googleapis.com/token`,
     method: 'post',
@@ -56,10 +60,18 @@ export const googleRedirect = (async (req, res) => {
   });
 
   const user = await createOrUpdateGoogleUser(userData);
+  const session = await Session.create(user._id);
 
-  const payload = { id: user._id, googleReg: GOOGLE_CLIENT_SECRET };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
-  const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
+  const payload = {
+    id: user._id,
+    sessionId: session._id,
+    googleAuth: true,
+  };
+
+  const token = jwt.sign(payload, JWT_TOKEN_SECRET, { expiresIn: '1h' });
+  const refreshToken = jwt.sign(payload, JWT_REFRESHTOKEN_SECRET, {
+    expiresIn: '7d',
+  });
 
   const urlString = qS.stringifyUrl({
     url: FRONT_END_URL,
@@ -71,4 +83,27 @@ export const googleRedirect = (async (req, res) => {
   });
 
   return res.redirect(urlString);
+}) as RequestHandler;
+
+export const refreshTokens = (async (req, res) => {
+  req.body as IuserPayload;
+
+  const user = req.body.user;
+
+  if (!user) {
+    return Res.BadRequest(res);
+  }
+
+  const payload: ItokenPayload = {
+    id: user._id,
+    sessionId: req.body.sessionId,
+    googleAuth: req.body.googleAuth,
+  };
+
+  const token = jwt.sign(payload, JWT_TOKEN_SECRET, { expiresIn: '1h' });
+  const refreshToken = jwt.sign(payload, JWT_REFRESHTOKEN_SECRET, {
+    expiresIn: '7d',
+  });
+
+  return Res.Success(res, { token, refreshToken, email: user.email });
 }) as RequestHandler;
